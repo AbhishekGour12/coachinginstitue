@@ -34,7 +34,7 @@ export default function page() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/login", formData);
+      const response = await axios.post("http://localhost:5000/api/auth/login", formData);
 
       if (response.data.success) {
         alert("Login successful✅");
@@ -75,7 +75,7 @@ export default function page() {
               placeholder="Email..."
               // value={formData.email}
               // onChange={handleChange}
-              className="border-2 border-gray-300 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-600"
+              className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
             <input
               type="password"
@@ -83,7 +83,7 @@ export default function page() {
               placeholder="Password..."
               // value={formData.password}
               // onChange={handleChange}
-              className="border-2 border-gray-300 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-600"
+              className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
             <button
