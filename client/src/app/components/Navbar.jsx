@@ -59,24 +59,33 @@ export default function Navbar({ sidebar_open }) {
 
     return (
         <>
-            <div className='navbar sticky-top z-10 flex items-center justify-between font-sans text-black' style={{ backgroundColor: 'white', boxShadow: 'rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px' }}>
+            <div className='navbar  z-10 flex items-center justify-between font-sans text-black' style={{ backgroundColor: 'white', boxShadow: 'rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px' }}>
 
                 {/* Frame-1 */}
                 <div className='flex justify-between h-full items-center ml-8 max-sm:ml-0'>
 
                     {/* Logo */}
-                    <div className='logo mr-7 '>
-                        {/* Next.js Link aur Image. Logo 'public' folder me hona chahiye. */}
+                    {/* <div className='logo mr-7 '>
+                        
                         <Link href="/">
                             <Image
                                 src="/logo.png" // Path 'public' folder se start hota hai
                                 alt="Logo"
-                                width={160} // Width provide karna zaroori hai
-                                height={30} // Height provide karna zaroori hai
-                                className='w-full object-cover'
-                                style={{ maxHeight: '30px' }} // Max-height inline apply kar diya
+                                width={700} // Width provide karna zaroori hai
+                                height={700} // Height provide karna zaroori hai
+                                className='w-full h-auto'
+                            // style={{ maxHeight: '30px' }} // Max-height inline apply kar diya
                             />
                         </Link>
+                    </div> */}
+                    <div className="max-w-[160px]">
+                        <Image
+                            src="/logo.png"
+                            alt="LOGO"
+                            width={700}
+                            height={700}
+                            className="w-full h-auto"
+                        />
                     </div>
 
                     <div className='h-12 relative  '>
@@ -152,10 +161,11 @@ export default function Navbar({ sidebar_open }) {
                         </div>
                     </div> : <div className='flex'>
                         <div className='text-purple-800'>
-                            <Link href="/login">  <button className='signin-n cursor-pointer transition-all  ease-in-out  h-10 rounded-lg  border-2 border-purple-600 hover:border-purple-300  mr-8 hover:text-white font-sans bg-purple-300 hover:bg-purple-500 ' style={{ width: '90px', fontWeight: '500' }}>Log In</button> </Link>
+                            <Link href="/LogIn">  <button className='signin-n cursor-pointer transition-all  ease-in-out  h-10 rounded-lg  border-2 border-purple-600 hover:border-purple-300  mr-8 hover:text-white font-sans bg-purple-300 hover:bg-purple-500 ' style={{ width: '90px', fontWeight: '500' }}>Log In</button> </Link>
                         </div>
-                        <div className=' rounded-lg bg-gray-200'><div>
-                            <Link href="/Signup" > <button className='cursor-pointer h-10 rounded-lg transition-all duration-200 ease-in-out  border-2 border-purple-600 hover:border-purple-300  text-purple-500 hover:text-white font-sans hover:bg-purple-600' style={{ width: '90px', fontWeight: '500' }}>Sign up</button></Link>
+                        <div className=' rounded-lg bg-purple-100'><div>
+                            <Link href="/SignUp" > <button className='cursor-pointer h-10 rounded-lg transition-all duration-200 ease-in-out  border-2 border-purple-600 hover:border-purple-300  text-blue-900 hover:text-white font-sans hover:bg-purple-600' style={{ width: '90px', fontWeight: '500' }}>Sign up</button></Link>
+                            {/* <Link href="/SignIn" > <button className='cursor-pointer h-10 rounded-lg transition-all duration-200 ease-in-out  border-2 border-purple-600 hover:border-purple-300  text-purple-500 hover:text-white font-sans hover:bg-purple-600' style={{ width: 'fit-content', fontWeight: '500' }}>SiIn</button></Link> */}
                         </div>
                         </div>
                     </div>
