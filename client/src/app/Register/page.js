@@ -1,12 +1,11 @@
-"use client"
-import React,{useState} from 'react'
-import SidebarImg from '../components/SidebarImg';
-import Link from 'next/link';
-import axios from 'axios';
+"use client";
+import React, { useState } from "react";
+import SidebarImg from "../../components/SidebarImg";
+import Link from "next/link";
+import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function page() {
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,8 +16,8 @@ export default function page() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [studentclass, setStudentclass] = useState('')
-  const [stream, setStream] = useState('');
+  const [studentclass, setStudentclass] = useState("");
+  const [stream, setStream] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -29,7 +28,7 @@ export default function page() {
     }));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -42,15 +41,24 @@ export default function page() {
       setError("Please fill all the fields");
       return;
     }
-    setError("")
+    setError("");
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", { ...formData, class: studentclass, stream: stream } );
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        { ...formData, class: studentclass, stream: stream }
+      );
 
       if (response.data.success) {
         alert("Registration successful✅");
-        setFormData({ name: "", email: "", number: "", city: "", password: "" });
+        setFormData({
+          name: "",
+          email: "",
+          number: "",
+          city: "",
+          password: "",
+        });
         setStudentclass("");
         setStream("");
       } else {
@@ -62,7 +70,7 @@ export default function page() {
     } finally {
       setLoading(false);
     }
-  }
+  };
   return (
     <div className="flex h-screen justify-evenly items-center flex-wrap md:flex-nowrap">
       <div className="hidden md:flex w-1/2 justify-center items-center">
@@ -156,7 +164,7 @@ export default function page() {
                 </select>
               </div>
             )}
-            <div className='relative'>
+            <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -166,10 +174,10 @@ export default function page() {
                 className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
               />
               <span
-                onClick={() =>setShowPassword(!showPassword)}
-                className='absolute right-3 top-2.5 text-gray-500 cursor-pointer'
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2.5 text-gray-500 cursor-pointer"
               >
-                {showPassword ? <FaEyeSlash/> : <FaEye/>}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
             {error && (
@@ -201,5 +209,4 @@ export default function page() {
       </div>
     </div>
   );
-  }
-  
+}

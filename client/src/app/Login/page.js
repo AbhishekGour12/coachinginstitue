@@ -1,15 +1,14 @@
-"use client"
+"use client";
 import React, { useState } from "react";
-import SidebarImg from "../components/SidebarImg";
+import SidebarImg from "../../components/SidebarImg";
 import Link from "next/link";
-import axios from 'axios';
+import axios from "axios";
 // import LoginImg from '../../../public/LoginImg.png'
 
 export default function page() {
-
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,23 +17,26 @@ export default function page() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]:value,
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
       setError("Please fill in both fields!");
-      return
+      return;
     }
 
-    setError("")
+    setError("");
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        formData
+      );
 
       if (response.data.success) {
         alert("Login successful✅");
@@ -85,11 +87,14 @@ export default function page() {
               // onChange={handleChange}
               className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
             <button
               type="submit"
               disabled={loading}
-              className="w-full text-white bg-purple-700 hover:bg-purple-800 cursor-pointer py-2 font-semibold rounded-md transition duration-300">
+              className="w-full text-white bg-purple-700 hover:bg-purple-800 cursor-pointer py-2 font-semibold rounded-md transition duration-300"
+            >
               {loading ? "loging in..." : "Submit"}
             </button>
           </div>
