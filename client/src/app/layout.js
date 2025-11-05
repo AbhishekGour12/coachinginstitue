@@ -2,6 +2,7 @@
 import './globals.css';
 import './common.css';
 import { Providers } from './providers';
+import Navbar from './components/Navbar';
 
 // Add metadata here (good for SEO, works in Server Components)
 export const metadata = {
@@ -12,8 +13,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        />
+      </head>
       <body>
-        <Providers>  
+        <Navbar />
+        <Providers>
           {children}
         </Providers>
       </body>
