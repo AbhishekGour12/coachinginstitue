@@ -2,7 +2,8 @@
 import './globals.css';
 import './common.css';
 import { Providers } from './providers';
-
+import Navbar from './components/Navbar';
+import ClientLayout from './layout/ClientLayout';
 // Add metadata here (good for SEO, works in Server Components)
 export const metadata = {
   title: 'My Next.js App',
@@ -12,10 +13,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        />
+      </head>
       <body>
-        <Providers>  
-          {children}
-        </Providers>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
