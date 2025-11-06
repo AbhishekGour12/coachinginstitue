@@ -10,13 +10,17 @@ export default function page() {
     email: "",
     password: "",
   });
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handlechange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
+      [name]: value,
+    }));
+  };
       [name]: value,
     }));
   };
@@ -39,11 +43,12 @@ export default function page() {
       );
 
       if (response.data.success) {
-        alert("Login successful✅");
-        localStorage.setItem("token", response.data.token);
-        router.push("/dashboard");
+        alert("Registration successful✅");
+        setFormData({ name: "", email: "", number: "", city: "", password: "" });
+        setStudentclass("");
+        setStream("");
       } else {
-        setError(response.data.message || "Login failed!");
+        alert("Registration failed, try again!");
       }
     } catch (error) {
       console.error(error);
@@ -51,32 +56,31 @@ export default function page() {
     } finally {
       setLoading(false);
     }
-  };
-
+  }
   return (
-    <div className="flex h-screen justify-evenly items-center flex-wrap md:flex-nowrap">
-      <div className="hidden md:flex w-1/2 justify-center items-center">
-        {/* <Image src={LoginImg} alt="Login" className="w-full h-auto"/> */}
-        <SidebarImg src="/LoginImg.png" alt="Login" width={700} height={700} />
+    <div className='flex py-9 max-lg:py-3 sm:px-10 max-sm:px-6 justify-between max-lg:justify-center mt-10 w-[95%] m-auto'>
+      <div className='max-lg:hidden flex items-center flex-1 max-w-[650px] h-auto  mr-8'>
+        <Image src="/SignUpImg.svg" alt="Login" width={700} height={700} className="w-full" />
+        {/* <Image src="/signupImg.png" alt="Login" width={700} height={700} className="w-full " /> */}
       </div>
-
-      <div className="w-full md:w-1/2 flex justify-center items-center p-4">
+      <div className="max-lg:flex-1 md:max-w-[460px] max-md:max-w-[400px] mx-auto pl-2 pr-2 ">
         <form
-          // onSubmit={handleSubmit}
-          className="w-full max-w-sm bg-white shadow-lg rounded-2xl p-6 space-y-10 border border-purple-200"
+          onSubmit={handleSubmit}
+          className="lg:max-w-[430px] rounded-2xl lg:pt-10 max-lg:pt-2.5"
         >
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800">
-              Log In To Continue Your Learning Journey
+          <div className=' max-lg:mb-10 max-sm:mb-6 lg:mb-[49px]'>
+            <h1 className="lg:text-[32px] md:text-[36px] max-md:text-[25px] font-bold text-purple-800 text-center ">
+              Log In To Continue Your <br /> Learning Journey
             </h1>
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-8 px-2">
+
             <input
               type="email"
               name="email"
-              placeholder="Email..."
-              // value={formData.email}
-              // onChange={handleChange}
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
               className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
             <input
@@ -98,22 +102,25 @@ export default function page() {
               {loading ? "loging in..." : "Submit"}
             </button>
           </div>
-          <div className=" text-center bg-gray-100 rounded-md p-3">
-            <p className="font-medium py-2 text-gray-700">
+          <div className='my-[49px] flex gap-1.5 items-center text-[#AEAEAE] px-2'>
+            <hr className='border flex-1 text' />
+            <p className='font-semibold text-[16px]'>Other Log In Options</p>
+            <hr className='border flex-1' />
+          </div>
+          <div className="lg:my-8 my-4 text-center  bg-[#E9E9E9] mx-2 ">
+            <p className="py-2 mt-2 text-[16px] font-semibold">
               Don't Have An Account?{" "}
-              <Link href="/Register">
-                <span className="text-purple-600 cursor-pointer hover:underline">
-                  Sign Up
+              <Link href="/Signup">
+                <span className="ml-1 text-purple-600 cursor-pointer hover:underline">
+                  SignUp
                 </span>
               </Link>
             </p>
-            <hr className="border-gray-400" />
-            <p className="text-purple-800 font-semibold py-2">
-              Login with your organization
-            </p>
+
           </div>
         </form>
       </div>
-    </div>
+    </div >
   );
 }
+
