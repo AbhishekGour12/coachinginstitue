@@ -128,7 +128,7 @@ export default function page() {
           <div className="lg:my-8 my-4 text-center  bg-[#E9E9E9] mx-2 ">
             <p className="py-2 mt-2 text-[16px] font-semibold">
               Don't Have An Account?{" "}
-              <Link href="/SignUp">
+              <Link href="/Signup">
                 <span className="ml-1 text-purple-600 cursor-pointer hover:underline">
                   SignUp
                 </span>

@@ -186,7 +186,7 @@ export default function page() {
           <div className="lg:my-8 my-4 text-center bg-[#E9E9E9]">
             <p className="font-medium py-2 mt-2">
               Already Have An Account?{" "}
-              <Link href="/LogIn">
+              <Link href="/Login">
                 <span className="ml-2.5 text-purple-600 cursor-pointer underline">
                   Log In
                 </span>

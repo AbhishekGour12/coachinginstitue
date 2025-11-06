@@ -18,7 +18,7 @@ const hardcodedCourses = [
 
 
 
-export default function Navbar({ sidebar_open }) {
+export default function Navbar() {
     const [ishovered, setIshovered] = useState(false);
     const [courses, setCourses] = useState(hardcodedCourses); // Hardcoded data use kiya
     const [login, setLogin] = useState(false); // Default state, aap isse manage kar sakte hain
@@ -55,7 +55,9 @@ export default function Navbar({ sidebar_open }) {
     }
 
     // Yeh `.coursetype` element ko dikhane ke liye logic
-
+      const sidebar_open = () =>{
+         document.getElementById('sidebar').classList.add("sidebar")
+      }
 
     return (
         <>
@@ -161,10 +163,10 @@ export default function Navbar({ sidebar_open }) {
                         </div>
                     </div> : <div className='flex'>
                         <div className='text-purple-800'>
-                            <Link href="/LogIn">  <button className='signin-n cursor-pointer transition-all  ease-in-out  h-10 rounded-lg  border-2 border-purple-600 hover:border-purple-300  mr-8 hover:text-white font-sans bg-purple-300 hover:bg-purple-500 ' style={{ width: '90px', fontWeight: '500' }}>Log In</button> </Link>
+                            <Link href="/Login">  <button className='signin-n cursor-pointer transition-all  ease-in-out  h-10 rounded-lg  border-2 border-purple-600 hover:border-purple-300  mr-8 hover:text-white font-sans bg-purple-300 hover:bg-purple-500 ' style={{ width: '90px', fontWeight: '500' }}>Log In</button> </Link>
                         </div>
                         <div className=' rounded-lg bg-purple-100'><div>
-                            <Link href="/SignUp" > <button className='cursor-pointer h-10 rounded-lg transition-all duration-200 ease-in-out  border-2 border-purple-600 hover:border-purple-300  text-blue-900 hover:text-white font-sans hover:bg-purple-600' style={{ width: '90px', fontWeight: '500' }}>Sign up</button></Link>
+                            <Link href="/Signup" > <button className='cursor-pointer h-10 rounded-lg transition-all duration-200 ease-in-out  border-2 border-purple-600 hover:border-purple-300  text-blue-900 hover:text-white font-sans hover:bg-purple-600' style={{ width: '90px', fontWeight: '500' }}>Sign up</button></Link>
                             {/* <Link href="/SignIn" > <button className='cursor-pointer h-10 rounded-lg transition-all duration-200 ease-in-out  border-2 border-purple-600 hover:border-purple-300  text-purple-500 hover:text-white font-sans hover:bg-purple-600' style={{ width: 'fit-content', fontWeight: '500' }}>SiIn</button></Link> */}
                         </div>
                         </div>
