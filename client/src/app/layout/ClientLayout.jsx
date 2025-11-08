@@ -7,7 +7,7 @@ export default function ClientLayout({ children }) {
   const pathname = usePathname();
 
   // Hide navbar on /Login and /Signup
-  const hideNavbar = pathname === "/LogIn" || pathname === "/SignUp";
+  const hideNavbar = pathname === "/Login" || pathname === "/Signup";
 
   return (
     <div>

@@ -2,13 +2,16 @@
 
 import HeroSlider from "./components/HeroSection";
 import Image from "next/image";
+import Navbar from "./components/Navbar";
 export default function Home() {
 
 
 
   return (
     <>
+    <Navbar/>
       <div className="mt-[80px]">
+        
         <HeroSlider />
         {/* <div className="flex">
           <div className="w-[200px] h-[200px]">

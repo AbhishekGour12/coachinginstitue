@@ -1,13 +1,16 @@
-"use client";
-import React, { useState } from "react";
-import SidebarImg from "../../components/SidebarImg";
-import Link from "next/link";
-import axios from "axios";
+"use client"
+import React, { useState } from 'react'
+import SidebarImg from '../components/SidebarImg';
+import Link from 'next/link';
+import axios from 'axios';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Image from 'next/image';
+import { authAPI } from '../lib/auth';
+import toast from 'react-hot-toast';
 
 
 export default function page() {
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,8 +21,8 @@ export default function page() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [studentclass, setStudentclass] = useState("");
-  const [stream, setStream] = useState("");
+  const [studentclass, setStudentclass] = useState('')
+  const [stream, setStream] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -43,36 +46,26 @@ export default function page() {
       setError("Please fill all the fields");
       return;
     }
-    setError("");
+    setError("")
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        { ...formData, class: studentclass, stream: stream }
-      );
+      const response = await authAPI.register({ ...formData, classes: studentclass, stream: stream });
 
-      if (response.data.success) {
-        alert("Registration successful✅");
-        setFormData({
-          name: "",
-          email: "",
-          number: "",
-          city: "",
-          password: "",
-        });
+      if (response) {
+        toast.success(response.message)
+        setFormData({ name: "", email: "", number: "", city: "", password: "" });
         setStudentclass("");
         setStream("");
-      } else {
-        alert("Registration failed, try again!");
       }
     } catch (error) {
-      console.error(error);
+      console.log(error.message)
+      toast.error(error.message)
       setError("Something went wrong. Please try again!");
     } finally {
       setLoading(false);
     }
-  };
+  }
   return (
     <div className='flex py-9 max-lg:py-3 sm:px-10 max-sm:px-6 justify-between max-lg:justify-center mt-10 w-[95%] m-auto'>
       <div className='max-lg:hidden flex items-center flex-1 max-w-[650px] h-auto mr-5'>
@@ -164,7 +157,7 @@ export default function page() {
                 </select>
               </div>
             )}
-            <div className="relative">
+            <div className='relative'>
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -175,7 +168,7 @@ export default function page() {
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-gray-500 cursor-pointer"
+                className='absolute right-3 top-3 text-gray-500 cursor-pointer'
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>

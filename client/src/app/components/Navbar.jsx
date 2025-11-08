@@ -7,6 +7,8 @@ import { FaGears } from "react-icons/fa6";
 
 // CSS file import karein
 import '../CSS/common.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginSuccess } from '../store/features/authSlice';
 
 // Hardcoded data (jaisa aapne kaha tha)
 const hardcodedCourses = [
@@ -21,8 +23,11 @@ const hardcodedCourses = [
 export default function Navbar() {
     const [ishovered, setIshovered] = useState(false);
     const [courses, setCourses] = useState(hardcodedCourses); // Hardcoded data use kiya
-    const [login, setLogin] = useState(false); // Default state, aap isse manage kar sakte hain
-
+    const [login, setLogin] = useState(false);
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth)
+   // Default state, aap isse manage kar sakte hain
+  console.log(user)
     function hovered() {
         setIshovered(true);
     }
@@ -38,8 +43,10 @@ export default function Navbar() {
 
     // Dummy function (logout logic hata diya)
     function logout() {
-        console.log("Logout clicked");
+        
         setLogin(false);
+        localStorage.removeItem('token');
+        dispatch(loginSuccess(""))
         document.querySelector('.profile').style.display = "none";
     }
 
@@ -81,6 +88,7 @@ export default function Navbar() {
                         </Link>
                     </div> */}
                     <div className="max-w-[160px]">
+                        <Link href="/"> 
                         <Image
                             src="/logo.png"
                             alt="LOGO"
@@ -88,6 +96,7 @@ export default function Navbar() {
                             height={700}
                             className="w-full h-auto"
                         />
+                        </Link>
                     </div>
 
                     <div className='h-12 relative  '>
@@ -142,10 +151,10 @@ export default function Navbar() {
                 {/* Category */}
                 <div className='Category flex justify-between items-center text-purple-600 font-inter text-lg max-lg:hidden' style={{ fontWeight: '500' }}>
                     <div className='mr-7'>
-                        <Link href="/resume" className='cursor-pointer hover:no-underline hover:text-purple-800 hover:font-medium' >Contact Us</Link>
+                        <Link href="/Contact" className='cursor-pointer hover:no-underline hover:text-purple-800 hover:font-medium' >Contact Us</Link>
                     </div>
                     <div className='mr-7'>
-                        <Link href="/quiz" className='hover:no-underline cursor-pointer hover:text-purple-800 hover:font-medium' >About</Link>
+                        <Link href="/About" className='hover:no-underline cursor-pointer hover:text-purple-800 hover:font-medium' >About</Link>
                     </div>
                     <div className='mr-7'>
                         <Link href="/successtories" className='hover:no-underline cursor-pointer hover:text-purple-800 hover:font-medium' >Courses</Link>
@@ -154,12 +163,13 @@ export default function Navbar() {
 
                 {/* Porfile Login Signup */}
                 <div className='flex justify-between  items-center h54-12 font-normal text-purple-600  text-lg mr-8  max-xl:hidden   '>
-                    {login ? <div className='flex items-center'>
+                    {user.user ? <div className='flex items-center'>
                         <div className='text-purple-900 '>
                             <button className=' h-10 rounded-lg cursor-pointer bg-gray-300 hover:bg-purple-600 border-2 border-purple-700 hover:border-gray-300 font-semibold  mr-8 hover:text-white font-sans' style={{ fontSize: '17px', width: '90px' }} onClick={logout}>Log out</button>
                         </div>
-                        <div className='h-full flex items-center mr-3'>
-                            <i className=" cursor-pointer fa-regular fa-circle-user bg-gray-300 hover:bg-gray-200 rounded-circle " style={{ fontSize: '39px' }} onMouseOver={showProfile}></i>
+                        <div className='h-full flex items-center mr-3 '>
+                            <i className=" cursor-pointer fa-regular fa-circle-user  hover:bg-gray-200 rounded-circle rounded-full " style={{ fontSize: '39px' }} onMouseOver={showProfile}></i>
+                            <p className='ml-3'>{user.user.name}</p>
                         </div>
                     </div> : <div className='flex'>
                         <div className='text-purple-800'>
@@ -174,7 +184,7 @@ export default function Navbar() {
                     }
 
                     {/* Profile Section - Yeh abhi bhi hidden rahega jab tak logic add na ho */}
-                    <div className="profile" style={{ display: 'none', position: 'absolute', top: '70px', right: '10px', backgroundColor: 'white', border: '1px solid #ccc', zIndex: 100 }}>
+                    <div className="profile" style={{ display: 'none', position: 'absolute', top: '70px', right: '10px', backgroundColor: 'white', border: '1px solid #ccc', zIndex: 100 }} >
                         <p>Profile Menu</p>
                         {/* Yahan aapka hardcoded profile component aa sakta hai */}
                     </div>

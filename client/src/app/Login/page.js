@@ -1,11 +1,20 @@
-"use client";
-import React, { useState } from "react";
-import SidebarImg from "../../components/SidebarImg";
-import Link from "next/link";
-import axios from "axios";
-// import LoginImg from '../../../public/LoginImg.png'
+
+"use client"
+import React, { useState } from 'react'
+import SidebarImg from '../components/SidebarImg';
+import Link from 'next/link';
+import axios from 'axios';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Image from 'next/image';
+import { authAPI } from '../lib/auth';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../store/features/authSlice';
+
 
 export default function page() {
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -13,7 +22,11 @@ export default function page() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [studentclass, setStudentclass] = useState('')
+  const [stream, setStream] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -21,38 +34,41 @@ export default function page() {
       [name]: value,
     }));
   };
-      [name]: value,
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.email || !formData.password) {
-      setError("Please fill in both fields!");
+    if (
+      
+      !formData.email ||
+      !formData.password 
+    ) {
+      setError("Please fill all the fields");
       return;
     }
-
-    setError("");
+    setError("")
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        formData
-      );
+      const response = await authAPI.login(formData);
 
-      if (response.data.success) {
-        alert("Registration successful✅");
-        setFormData({ name: "", email: "", number: "", city: "", password: "" });
+      if (response) {
+        toast.success(response.message);
+        setFormData({ email: "",  password: "" });
         setStudentclass("");
         setStream("");
+        localStorage.setItem("token", response.user.token);
+        
+        dispatch(loginSuccess(response.user))
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
       } else {
-        alert("Registration failed, try again!");
+        toast.error("Login failed, try again!");
       }
     } catch (error) {
-      console.error(error);
-      setError("Something went wrong. Please try again!");
+    
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -83,23 +99,32 @@ export default function page() {
               placeholder="Email"
               className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password..."
-              // value={formData.password}
-              // onChange={handleChange}
-              className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
-            />
+
+            <div className='relative'>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className='absolute right-3 top-3 text-gray-500 cursor-pointer'
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
             {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
+              <p className="text-red-500 text-sm  text-center">{error}</p>
             )}
             <button
               type="submit"
               disabled={loading}
-              className="w-full text-white bg-purple-700 hover:bg-purple-800 cursor-pointer py-2 font-semibold rounded-md transition duration-300"
+              className="w-full text-white bg-purple-700 hover:bg-purple-800 cursor-pointer py-2 font-semibold transition duration-300"
             >
-              {loading ? "loging in..." : "Submit"}
+              {loading ? "submitting..." : "Submit"}
             </button>
           </div>
           <div className='my-[49px] flex gap-1.5 items-center text-[#AEAEAE] px-2'>
@@ -110,7 +135,7 @@ export default function page() {
           <div className="lg:my-8 my-4 text-center  bg-[#E9E9E9] mx-2 ">
             <p className="py-2 mt-2 text-[16px] font-semibold">
               Don't Have An Account?{" "}
-              <Link href="/Signup">
+              <Link href="/SignUp">
                 <span className="ml-1 text-purple-600 cursor-pointer hover:underline">
                   SignUp
                 </span>
@@ -123,4 +148,3 @@ export default function page() {
     </div >
   );
 }
-

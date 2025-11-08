@@ -4,6 +4,7 @@ import './common.css';
 import { Providers } from './providers';
 import Navbar from './components/Navbar';
 import ClientLayout from './layout/ClientLayout';
+import { Toaster } from 'react-hot-toast';
 // Add metadata here (good for SEO, works in Server Components)
 export const metadata = {
   title: 'My Next.js App',
@@ -20,7 +21,10 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <ClientLayout>{children}</ClientLayout>
+        <Providers> 
+        {children}
+        </Providers>
+       
       </body>
     </html>
   );

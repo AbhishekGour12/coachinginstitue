@@ -4,7 +4,8 @@ export const authAPI = {
     // Register new user
     register: async (userData) => {
     try {
-      const response = await api.post('/auth/register', userData);
+      const response = await api.post('/api/auth/register', userData);
+      console.log(response)
       return response.data;
     } catch (error) {
       // Enhanced error handling for registration
@@ -18,7 +19,7 @@ export const authAPI = {
   // Login user
   login: async (credentials) => {
     try {
-      const response = await api.post('/auth/login', credentials);
+      const response = await api.post('/api/auth/login', credentials);
       return response.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || 
@@ -28,9 +29,13 @@ export const authAPI = {
     }
   },
     // Get current user profile
-    getProfile: async () => {
+    getProfile: async (token) => {
         try {
-            const response = await api.get('/auth/profile');
+            const response = await api.get(`/api/auth/${token}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         } catch (error) {
             throw error.response?.data || error.message;

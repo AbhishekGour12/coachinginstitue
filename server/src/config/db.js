@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config()
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
+    const conn = await mongoose.connect(process.env.MONGO_URI || "mongodb+srv://projects:123456ytrewq@cluster0.0qqnloi.mongodb.net/coachingInstitute?retryWrites=true&w=majority&appName=Cluster0", {
       useNewUrlParser: true,
       
     });
