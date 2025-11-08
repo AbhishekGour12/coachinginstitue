@@ -103,7 +103,7 @@ export default function Sidebar({ username, profile, logout }) {
 
 
     return (
-        <div className='sidebar modal border h-full w-full  hidden'>
+        <div className='sidebar modal border h-full w-full hidden'>
             <div id="sidebar" className=' opacity mt-0 '>
                 <div className='sidebar-details'>
 
