@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import Footer from "@/components/Footer";
 
 export default function Page() {
   return (
@@ -170,6 +171,10 @@ export default function Page() {
             </div>
           </div>
         </div>
+      </div>
+      
+      <div>
+        <Footer/>
       </div>
     </div>
   );
