@@ -12,7 +12,6 @@ import PopularClasses from "./components/Home/PopularClasses";
 export default function Home() {
 
 
-export default function Home() {
 
   return (
     <>

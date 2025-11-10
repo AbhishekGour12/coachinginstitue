@@ -174,7 +174,7 @@ export default function Sidebar({ username, profile, logout }) {
                         </div>
 
                     </div>
-                </div>
+                </div>cd 
 
                 <div className='course-type hidden w-full h-full'>
                     <div className='flex p-3 bg-purple-500' onClick={course_modal}>
