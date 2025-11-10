@@ -7,6 +7,7 @@ import ClientLayout from "./layout/ClientLayout";
 import { Toaster } from "react-hot-toast";
 import "swiper/css";
 import "swiper/css/pagination";
+import Footer from "./components/Footer";
 // Add metadata here (good for SEO, works in Server Components)
 export const metadata = {
   title: "My Next.js App",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Providers>{children}</Providers>
+        <Footer/>
       </body>
     </html>
   );

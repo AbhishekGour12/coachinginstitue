@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <>
     <Navbar/>
-      <div className="mt-[80px]">
+      <div className="mt-20">
         
         <HeroSlider />
         <Services/>
