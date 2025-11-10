@@ -1,11 +1,16 @@
-"use client";
-import React, { useState } from "react";
-import SidebarImg from "../../components/SidebarImg";
-import Link from "next/link";
-import axios from "axios";
+"use client"
+import React, { useState } from 'react'
+import SidebarImg from '../components/SidebarImg';
+import Link from 'next/link';
+import axios from 'axios';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Image from 'next/image';
+import { authAPI } from '../lib/auth';
+import toast from 'react-hot-toast';
+
 
 export default function page() {
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,8 +21,8 @@ export default function page() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [studentclass, setStudentclass] = useState("");
-  const [stream, setStream] = useState("");
+  const [studentclass, setStudentclass] = useState('')
+  const [stream, setStream] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -41,93 +46,82 @@ export default function page() {
       setError("Please fill all the fields");
       return;
     }
-    setError("");
+    setError("")
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        { ...formData, class: studentclass, stream: stream }
-      );
+      const response = await authAPI.register({ ...formData, classes: studentclass, stream: stream });
 
-      if (response.data.success) {
-        alert("Registration successful✅");
-        setFormData({
-          name: "",
-          email: "",
-          number: "",
-          city: "",
-          password: "",
-        });
+      if (response) {
+        toast.success(response.message)
+        setFormData({ name: "", email: "", number: "", city: "", password: "" });
         setStudentclass("");
         setStream("");
-      } else {
-        alert("Registration failed, try again!");
       }
     } catch (error) {
-      console.error(error);
+      console.log(error.message)
+      toast.error(error.message)
       setError("Something went wrong. Please try again!");
     } finally {
       setLoading(false);
     }
-  };
+  }
   return (
-    <div className="flex h-screen justify-evenly items-center flex-wrap md:flex-nowrap">
-      <div className="hidden md:flex w-1/2 justify-center items-center">
-        {/* <Image src={LoginImg} alt="Login" className="w-full h-auto"/> */}
-        <SidebarImg src="/LoginImg.png" alt="Login" width={700} height={700} />
+    <div className='flex py-9 max-lg:py-3 sm:px-10 max-sm:px-6 justify-between max-lg:justify-center mt-10 w-[95%] m-auto'>
+      <div className='max-lg:hidden flex items-center flex-1 max-w-[650px] h-auto mr-5'>
+        {/* <Image src="/LoginImgcopy.png" alt="Login" width={700} height={700} className="w-full " /> */}
+        <Image src="/SignUpImg.svg" alt="Login" width={700} height={700} className="w-full text-black border" />
       </div>
-      <div className="w-full md:w-1/2 flex justify-center items-center p-4">
+      <div className="max-lg:flex-1 md:max-w-[460px] max-md:max-w-[400px] mx-auto pl-2 pr-2 ">
         <form
-          // onSubmit={handleSubmit}
-          className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6 space-y-6 px-8 border border-purple-200"
+          onSubmit={handleSubmit}
+          className="lg:max-w-[406px] rounded-2xl lg:pt-6 max-lg:pt-2.5"
         >
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800">
-              Sign Up And Start Learning
+          <div className=' max-lg:mb-10 max-sm:mb-6 lg:mb-6'>
+            <h1 className="mx-12 lg:text-3xl md:text-[36px] max-md:text-[25px] font-bold text-center text-purple-800">
+              <span className='whitespace-nowrap'>Sign Up And Start </span><br /> Learning
             </h1>
           </div>
           <div className="flex flex-col gap-4">
             <input
               type="text"
               name="name"
-              // value={formData.name}
-              // onChange={handleChange}
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Full Name"
               className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
             <input
               type="email"
               name="email"
-              // value={formData.email}
-              // onChange={handleChange}
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Email"
               className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
             <input
               type="number"
               name="number"
-              // value={formData.number}
-              // onChange={handleChange}
+              value={formData.number}
+              onChange={handleChange}
               placeholder="Mobile No"
               className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
             <input
               type="text"
               name="city"
-              // value={formData.city}
-              // onChange={handleChange}
+              value={formData.city}
+              onChange={handleChange}
               placeholder="City"
               className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
             />
             <select
               value={studentclass}
               onChange={(e) => setStudentclass(e.target.value)}
-              className={`border-2 border-purple-200 w-full px-3 py-2 rounded-md font-medium focus:outline-none focus:border-purple-500 ${
-                studentclass === ""
-                  ? "text-gray-500"
-                  : "font-medium text-gray-900"
-              }`}
+              className={`border-2 border-purple-200 w-full px-3 py-2 rounded-md font-medium focus:outline-none focus:border-purple-500 ${studentclass === ""
+                ? "text-gray-500"
+                : "font-medium text-gray-900"
+                }`}
             >
               <option value="">--Select class--</option>
               <option value="1">Class 1</option>
@@ -148,11 +142,10 @@ export default function page() {
                 <select
                   value={stream}
                   onChange={(e) => setStream(e.target.value)}
-                  className={`border-2 border-purple-200 w-full px-3 py-2 rounded-md font-medium focus:outline-none focus:border-purple-500 ${
-                    stream === ""
-                      ? "text-gray-500"
-                      : "font-medium text-gray-900"
-                  }`}
+                  className={`border-2 border-purple-200 w-full px-3 py-2 rounded-md font-medium focus:outline-none focus:border-purple-500 ${stream === ""
+                    ? "text-gray-500"
+                    : "font-medium text-gray-900"
+                    }`}
                 >
                   <option value="" disabled hidden>
                     --Select Stream--
@@ -164,18 +157,18 @@ export default function page() {
                 </select>
               </div>
             )}
-            <div className="relative">
+            <div className='relative'>
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                // value={formData.password}
-                // onChange={handleChange}
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Password"
                 className="border-2 border-purple-200 w-full px-3 py-2 rounded-md placeholder:font-medium focus:outline-none focus:border-purple-500"
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-gray-500 cursor-pointer"
+                className='absolute right-3 top-3 text-gray-500 cursor-pointer'
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
@@ -186,27 +179,24 @@ export default function page() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full text-white bg-purple-700 hover:bg-purple-800 cursor-pointer py-2 font-semibold rounded-md transition duration-300"
+              className="w-full text-white bg-purple-700 hover:bg-purple-800 cursor-pointer py-2 font-semibold  transition duration-300"
             >
               {loading ? "submitting..." : "Submit"}
             </button>
           </div>
-          <div className=" text-center bg-gray-100 rounded-md ">
-            <p className="font-medium py-2 text-gray-700">
+          <div className="lg:my-8 my-4 text-center bg-[#E9E9E9]">
+            <p className="font-medium py-2 mt-2">
               Already Have An Account?{" "}
               <Link href="/Login">
-                <span className="text-purple-600 cursor-pointer hover:underline">
+                <span className="ml-2.5 text-purple-600 cursor-pointer underline">
                   Log In
                 </span>
               </Link>
             </p>
-            <hr className="border-gray-400" />
-            <p className="text-purple-800 font-semibold py-2">
-              Sign up with your organization
-            </p>
+
           </div>
         </form>
       </div>
-    </div>
+    </div >
   );
 }

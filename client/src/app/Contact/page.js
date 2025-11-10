@@ -1,10 +1,12 @@
 "use client";
 import React from "react";
 import { FaInstagram, FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
+import Navbar from "../components/Navbar";
 
 export default function Page() {
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-gray-50 p-6">
+      <Navbar/>
       {/* Outer Container */}
       <div className="max-w-[900px] w-full bg-white rounded-2xl p-6 md:p-10 shadow-lg border border-gray-100">
         {/* Title */}

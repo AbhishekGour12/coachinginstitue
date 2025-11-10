@@ -1,20 +1,20 @@
-import User from "../models/User.js";
+import User from "../model/User.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 // Generate JWT
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
+    return jwt.sign({ id }, process.env.JWT_SECRET|| "123456", {
+        expiresIn: '1h',
     });
 };
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
 const registerUser = async (req, res) => {
-    const { username, email, password, role } = req.body;
-    console.log(username, password)
+    const { name, email, password, classes, stream, number } = req.body;
+    console.log(name, password,  classes, number)
     try {
-        if (!username || !email || !password || !role) {
+        if (!name || !email || !password ) {
             return res.status(400).json({ success: false, message: 'Please enter all fields' });
         }
 
@@ -25,10 +25,12 @@ const registerUser = async (req, res) => {
         const hashPassword = await bcrypt.hash(password, 10);
         console.log(hashPassword)
         const user = new User({
-            username,
+            name,
             email,
             password: hashPassword,
-            role: role
+            classes,
+            stream: stream ? stream : '',
+            phone: number
         })
         await user.save()
         console.log(user)
@@ -39,16 +41,16 @@ const registerUser = async (req, res) => {
                     username: user.username,
                     email: user.email,
                     role: user.role,
-                    token: generateToken(user._id),
+                   
                 },
                 message: 'register successfully'
             });
 
         } else {
-            res.status(400).json({ success: false, message: 'Invalid user data' });
+            res.json({ message: 'Invalid user data' });
         }
     } catch (err) {
-        res.status(500).json({ success: false, message: err.message })
+        res.json({  message: err.message })
         console.log(err.message)
     }
 };
@@ -75,9 +77,9 @@ const loginUser = async (req, res) => {
                 success: true,
                 user: {
                     _id: user._id,
-                    username: user.username,
+                    user: user.name,
                     email: user.email,
-                    role: user.role,
+                   
                     token: generateToken(user._id),
                 },
                 message: "login successfully"
@@ -93,4 +95,16 @@ const loginUser = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser };
+const getUserProfile = async (req, res) =>{
+    try{
+    const token = req.params.token;
+    const id = jwt.decode(token, process.env.JWT_SECRET || "123456");
+    const result = await User.findById(id.id).select('-password');
+    res.status(200).json({user: result});
+} catch (error) {
+    res.status(401).json({ success: false, message: error.message });
+    console.log(error.message);
+}
+}
+
+export { registerUser, loginUser, getUserProfile };

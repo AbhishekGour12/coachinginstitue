@@ -5,10 +5,10 @@ import express from 'express';
 import connectDB from './config/db.js';
 import authRoutes from './routes/AuthRoutes.js';
 
-dotenv.config();
+
 
 const app = express();
-
+dotenv.config()
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
