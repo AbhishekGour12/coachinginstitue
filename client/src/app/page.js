@@ -1,7 +1,6 @@
 'use client'
 
-import HeroSlider from "./components/HeroSection";
-import Image from "next/image";
+import HeroSlider from "./components/Home/HeroSection";
 import Navbar from "./components/Navbar";
 import Tutors from "./components/Home/Tutors";
 import Footer from "./components/Footer";
@@ -13,6 +12,7 @@ import PopularClasses from "./components/Home/PopularClasses";
 export default function Home() {
 
 
+export default function Home() {
 
   return (
     <>
