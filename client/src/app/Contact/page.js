@@ -50,73 +50,36 @@ export default function Page() {
     {
       icon: FaMapMarkerAlt,
       title: "Visit Our Campus",
-      details: [
-        "Baba Complex, near Indian Oil petrol pump, Tejaji Nagar, Khandwa Road",
-        " Indore M.P. 452020",
-      ],
-      color: "text-blue-500",
+      details: ["B 37/3, Ground Floor, Double Story", "Ramesh Nagar, Near Tejaji Nagar", "Indore, 452020"],
+      color: "text-blue-500"
     },
     {
       icon: FaPhone,
       title: "Call Us",
-      details: ["+91 6265866608", "+91 9981209825"],
-      color: "text-green-500",
+      details: ["+91 9599272754", "+91 9876543210"],
+      color: "text-green-500"
     },
     {
       icon: FaEnvelope,
       title: "Email Us",
-      details: ["mjdclasses@gmail.com"],
-      color: "text-red-500",
+      details: ["hello@info.com.ng", "admissions@elitecoaching.com"],
+      color: "text-red-500"
     },
     {
       icon: FaClock,
       title: "Working Hours",
-      details: [
-        "Mon - Fri: 8:00 AM - 8:00 PM",
-        "Sat: 9:00 AM - 6:00 PM",
-        "Sun: 10:00 AM - 2:00 PM",
-      ],
-      color: "text-purple-500",
-    },
+      details: ["Mon - Fri: 8:00 AM - 8:00 PM", "Sat: 9:00 AM - 6:00 PM", "Sun: 10:00 AM - 2:00 PM"],
+      color: "text-purple-500"
+    }
   ];
 
   const socialLinks = [
-    {
-      icon: FaInstagram,
-      href: "https://www.instagram.com/mjd_classes?igsh=enFubWR3eHNtM3Ns",
-      color: "hover:text-pink-600",
-      label: "Instagram",
-    },
-    {
-      icon: FaFacebookF,
-      href: "https://www.facebook.com/share/16PkLxHDHG/",
-      color: "hover:text-blue-600",
-      label: "Facebook",
-    },
-    {
-      icon: FaTwitter,
-      href: "#",
-      color: "hover:text-blue-400",
-      label: "Twitter",
-    },
-    {
-      icon: FaYoutube,
-      href: "#",
-      color: "hover:text-red-600",
-      label: "YouTube",
-    },
-    {
-      icon: FaWhatsapp,
-      href: "https://api.whatsapp.com/send/?phone=916265866608&text&type=phone_number&app_absent=0",
-      color: "hover:text-green-500",
-      label: "WhatsApp",
-    },
-    {
-      icon: FaLinkedin,
-      href: "#",
-      color: "hover:text-blue-700",
-      label: "LinkedIn",
-    },
+    { icon: FaInstagram, href: "#", color: "hover:text-pink-600", label: "Instagram" },
+    { icon: FaFacebookF, href: "#", color: "hover:text-blue-600", label: "Facebook" },
+    { icon: FaTwitter, href: "#", color: "hover:text-blue-400", label: "Twitter" },
+    { icon: FaYoutube, href: "#", color: "hover:text-red-600", label: "YouTube" },
+    { icon: FaWhatsapp, href: "#", color: "hover:text-green-500", label: "WhatsApp" },
+    { icon: FaLinkedin, href: "#", color: "hover:text-blue-700", label: "LinkedIn" }
   ];
 
   const faqItems = [
@@ -137,11 +100,11 @@ export default function Page() {
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100">
       <Navbar />
-
+      
       {/* Main Content */}
       <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
-        <motion.div
+        <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
@@ -150,8 +113,7 @@ export default function Page() {
             Get In Touch
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            We're here to help you achieve your academic goals. Reach out to us
-            for any queries about our courses, admissions, or scheduling.
+            We're here to help you achieve your academic goals. Reach out to us for any queries about our courses, admissions, or scheduling.
           </p>
         </motion.div>
 
@@ -160,7 +122,7 @@ export default function Page() {
           {/* Contact Form & Info Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
             {/* Contact Form */}
-            <motion.div
+            <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
@@ -170,9 +132,7 @@ export default function Page() {
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">
                   Send us a Message
                 </h2>
-                <p className="text-gray-600">
-                  We typically respond within 24 hours
-                </p>
+                <p className="text-gray-600">We typically respond within 24 hours</p>
               </div>
 
               {isSubmitted ? (
@@ -182,12 +142,8 @@ export default function Page() {
                   className="text-center py-12"
                 >
                   <FaCheckCircle className="text-green-500 text-6xl mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                    Message Sent!
-                  </h3>
-                  <p className="text-gray-600">
-                    Thank you for contacting us. We'll get back to you soon.
-                  </p>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-2">Message Sent!</h3>
+                  <p className="text-gray-600">Thank you for contacting us. We'll get back to you soon.</p>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -217,7 +173,7 @@ export default function Page() {
                       />
                     </div>
                   </div>
-
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="relative">
                       <FaPhone className="absolute left-3 top-3 text-gray-400" />
@@ -270,7 +226,7 @@ export default function Page() {
             </motion.div>
 
             {/* Contact Information */}
-            <motion.div
+            <motion.div 
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
@@ -288,21 +244,13 @@ export default function Page() {
                     className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
                   >
                     <div className="flex items-start space-x-4">
-                      <div
-                        className={`p-3 rounded-xl bg-${
-                          item.color.split("-")[1]
-                        }-50`}
-                      >
+                      <div className={`p-3 rounded-xl bg-${item.color.split('-')[1]}-50`}>
                         <item.icon className={`text-2xl ${item.color}`} />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-800 mb-2">
-                          {item.title}
-                        </h3>
+                        <h3 className="font-semibold text-gray-800 mb-2">{item.title}</h3>
                         {item.details.map((detail, idx) => (
-                          <p key={idx} className="text-gray-600 text-sm mb-1">
-                            {detail}
-                          </p>
+                          <p key={idx} className="text-gray-600 text-sm mb-1">{detail}</p>
                         ))}
                       </div>
                     </div>
@@ -317,9 +265,7 @@ export default function Page() {
                 transition={{ delay: 0.6 }}
                 className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
               >
-                <h3 className="font-semibold text-gray-800 mb-4 text-center">
-                  Connect With Us
-                </h3>
+                <h3 className="font-semibold text-gray-800 mb-4 text-center">Connect With Us</h3>
                 <div className="flex justify-center space-x-4">
                   {socialLinks.map((social, index) => (
                     <motion.a
@@ -343,7 +289,7 @@ export default function Page() {
                 className="grid grid-cols-2 gap-4"
               >
                 <motion.a
-                  href="tel:+916265866608"
+                  href="tel:+919599272754"
                   whileHover={{ scale: 1.05 }}
                   className="bg-green-500 hover:bg-green-600 text-white text-center py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
                 >
@@ -351,7 +297,7 @@ export default function Page() {
                   <span>Call Now</span>
                 </motion.a>
                 <motion.a
-                  href="https://api.whatsapp.com/send/?phone=916265866608&text&type=phone_number&app_absent=0"
+                  href="https://wa.me/919599272754"
                   whileHover={{ scale: 1.05 }}
                   className="bg-green-600 hover:bg-green-700 text-white text-center py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
                 >
@@ -370,12 +316,8 @@ export default function Page() {
             className="bg-white rounded-3xl p-8 shadow-2xl border border-purple-100 mb-20"
           >
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                Find Us Here
-              </h2>
-              <p className="text-gray-600">
-                Visit our campus for a personal consultation
-              </p>
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">Find Us Here</h2>
+              <p className="text-gray-600">Visit our campus for a personal consultation</p>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-lg">
               <iframe
@@ -398,9 +340,7 @@ export default function Page() {
             className="bg-white rounded-3xl p-8 shadow-2xl border border-purple-100"
           >
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                Frequently Asked Questions
-              </h2>
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">Frequently Asked Questions</h2>
               <p className="text-gray-600">Quick answers to common questions</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -413,15 +353,11 @@ export default function Page() {
                   whileHover={{ scale: 1.02 }}
                   className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border border-purple-100"
                 >
-                  <h3 className="font-semibold text-gray-800 mb-3 text-lg">
-                    {faq.question}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {faq.answer}
-                  </p>
+                  <h3 className="font-semibold text-gray-800 mb-3 text-lg">{faq.question}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
                 </motion.div>
               ))}
-
+              
               {/* Additional FAQ Items */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -430,15 +366,10 @@ export default function Page() {
                 whileHover={{ scale: 1.02 }}
                 className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border border-purple-100"
               >
-                <h3 className="font-semibold text-gray-800 mb-3 text-lg">
-                  What is the fee structure?
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  Our fees vary by course and duration. Contact us for detailed
-                  fee structure and payment plans.
-                </p>
+                <h3 className="font-semibold text-gray-800 mb-3 text-lg">What is the fee structure?</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">Our fees vary by course and duration. Contact us for detailed fee structure and payment plans.</p>
               </motion.div>
-
+              
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -446,15 +377,10 @@ export default function Page() {
                 whileHover={{ scale: 1.02 }}
                 className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border border-purple-100"
               >
-                <h3 className="font-semibold text-gray-800 mb-3 text-lg">
-                  Do you provide study materials?
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  Yes, we provide comprehensive study materials, practice
-                  papers, and digital resources to all our students.
-                </p>
+                <h3 className="font-semibold text-gray-800 mb-3 text-lg">Do you provide study materials?</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">Yes, we provide comprehensive study materials, practice papers, and digital resources to all our students.</p>
               </motion.div>
-
+              
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -462,13 +388,8 @@ export default function Page() {
                 whileHover={{ scale: 1.02 }}
                 className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border border-purple-100"
               >
-                <h3 className="font-semibold text-gray-800 mb-3 text-lg">
-                  Are there any scholarships available?
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  We offer merit-based scholarships and discounts for siblings.
-                  Contact us for eligibility criteria.
-                </p>
+                <h3 className="font-semibold text-gray-800 mb-3 text-lg">Are there any scholarships available?</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">We offer merit-based scholarships and discounts for siblings. Contact us for eligibility criteria.</p>
               </motion.div>
             </div>
           </motion.div>
@@ -481,15 +402,11 @@ export default function Page() {
             className="text-center mt-16"
           >
             <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl p-12 text-white shadow-2xl">
-              <h2 className="text-3xl font-bold mb-4">
-                Ready to Start Your Learning Journey?
-              </h2>
-              <p className="text-xl mb-8 text-purple-100">
-                Join hundreds of successful students who trust our coaching
-              </p>
+              <h2 className="text-3xl font-bold mb-4">Ready to Start Your Learning Journey?</h2>
+              <p className="text-xl mb-8 text-purple-100">Join hundreds of successful students who trust our coaching</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.a
-                  href="tel:+919981209825"
+                  href="tel:+919599272754"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all duration-300"
