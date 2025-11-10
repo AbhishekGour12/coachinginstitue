@@ -12,10 +12,10 @@ import { loginSuccess } from '../store/features/authSlice';
 
 // Hardcoded data (jaisa aapne kaha tha)
 const hardcodedCourses = [
-    { name: "development", id: "1" },
-    { name: "web dev", id: "2" },
-    { name: "Data Analytics", id: "3" },
-    { name: "Mobile Dev", id: "4" },
+    { name: "Physics", id: "1" },
+    { name: "Chemistry", id: "2" },
+    { name: "Mathematics", id: "3" },
+    { name: "Communication", id: "4" },
 ];
 
 
@@ -71,14 +71,14 @@ export default function Navbar() {
             <div className='navbar  z-10 flex items-center justify-between font-sans text-black' style={{ backgroundColor: 'white', boxShadow: 'rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px' }}>
 
                 {/* Frame-1 */}
-                <div className='flex justify-between h-full items-center ml-8 max-sm:ml-0'>
+                <div className='flex justify-between h-full items-center sm:ml-8 max-sm:ml-0'>
 
                     {/* Logo */}
-                    {/* <div className='logo mr-7 '>
+                    <div className='logo sm:mr-5 sm:ml-7 max-sm:ml-4 max-sm:mr-3'>
                         
                         <Link href="/">
                             <Image
-                                src="/logo.png" // Path 'public' folder se start hota hai
+                                src="/MJDLOGO.png" // Path 'public' folder se start hota hai
                                 alt="Logo"
                                 width={700} // Width provide karna zaroori hai
                                 height={700} // Height provide karna zaroori hai
@@ -86,18 +86,18 @@ export default function Navbar() {
                             // style={{ maxHeight: '30px' }} // Max-height inline apply kar diya
                             />
                         </Link>
-                    </div> */}
-                    <div className="max-w-[160px]">
+                    </div>
+                    {/* <div className="max-w-[160px] h-[20px] border">
                         <Link href="/"> 
                         <Image
                             src="/logo.png"
                             alt="LOGO"
-                            width={700}
-                            height={700}
-                            className="w-full h-auto"
+                            width={100}
+                            height={100}
+                            className="w-full h-fit"
                         />
                         </Link>
-                    </div>
+                    </div> */}
 
                     <div className='h-12 relative  '>
                         {/* courses and hovered div */}
@@ -109,7 +109,7 @@ export default function Navbar() {
 
                                         {/*Section 2 */}
                                         {courses ? courses.map(Element => (
-                                            <div key={Element.id} className=' group flex rounded-md  border-2 border-purple-300 hover:border-purple-50 justify-between items-center pl-6 pr-6 hover:bg-purple-200 bg-purple-50 hover:cursor-pointer' style={{ height: '50px' }} >
+                                            <div key={Element.id} className=' group flex rounded-md  border-2 border-purple-300 hover:border-purple-50 justify-between items-center pl-6 pr-6 max-sm:pl-2.5 max-sm:pr-2.5  hover:bg-purple-200 bg-purple-50 hover:cursor-pointer' style={{ height: '50px' }} >
                                                 <div className=''>
                                                     <a className='hover:no-underline  text-gray-600 group-hover:text-purple-600' href="#">{Element.name}</a>
                                                 </div>
@@ -139,7 +139,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Search Bar*/}
-                <div className=' w-fit flex justify-around items-center rounded-full font-inter ' style={{ backgroundColor: '#ECE6F0' }}>
+                <div className='max-sm:hidden w-fit flex justify-around items-center rounded-full font-inter ' style={{ backgroundColor: '#ECE6F0' }}>
                     <div className=''> {/*Input box */}
                         <input className='w-64 h-10 max-lg:h-10 max-lg:w-52 rounded-tl-full rounded-bl-full pl-5 pr-3 text-base placeholder-gray-500 outline-none' type="text" style={{ backgroundColor: '#ECE6F0' }} placeholder='Search' />
                     </div>
@@ -168,7 +168,8 @@ export default function Navbar() {
                             <button className=' h-10 rounded-lg cursor-pointer bg-gray-300 hover:bg-purple-600 border-2 border-purple-700 hover:border-gray-300 font-semibold  mr-8 hover:text-white font-sans' style={{ fontSize: '17px', width: '90px' }} onClick={logout}>Log out</button>
                         </div>
                         <div className='h-full flex items-center mr-3 '>
-                            <i className=" cursor-pointer fa-regular fa-circle-user  hover:bg-gray-200 rounded-circle rounded-full " style={{ fontSize: '39px' }} onMouseOver={showProfile}></i>
+                            <i className=" cursor-pointer fa-regular fa-circle-user  hover:bg-gray-200 rounded-circle rounded-full " style={{ fontSize: '39px' }} ></i>
+                            {/* <i className=" cursor-pointer fa-regular fa-circle-user  hover:bg-gray-200 rounded-circle rounded-full " style={{ fontSize: '39px' }} onMouseOver={showProfile}></i> */}
                             <p className='ml-3'>{user.user.name}</p>
                         </div>
                     </div> : <div className='flex'>

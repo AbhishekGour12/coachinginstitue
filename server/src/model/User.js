@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
     phone: {type: Number, required:true},
     classes: { type: String, required: true },
     stream: { type: String },
+    role: {type: String, enum: ['user', 'admin'], default: 'user'}
 }, { timestamps: true });
 
 const User = mongoose.model("User", UserSchema);
