@@ -14,20 +14,48 @@ import {
 import VideoForm from "./VideoForm";
 import { useVideoFilter } from "@/app/lib/useVideoFilter";
 import { videoAPI } from "@/app/lib/Video";
+import io  from 'socket.io-client';
 
+
+const socket = io(process.env.NEXT_PUBLIC_API_URL ,{
+  transports: ["websocket"],
+})
 export default function VideoManagement() {
   const [videos, setVideos] = useState([]);
   const [showVideoForm, setShowVideoForm] = useState(false);
   const [editingVideo, setEditingVideo] = useState(null);
   const [loading, setLoading] = useState(false);
-  const {filter} = useVideoFilter()
+  const [id, setId] = useState();
+  const [isConnected, setIsConnected] = useState(false)
+  const {filter} = useVideoFilter();
+
+  useEffect(() =>{
+    socket.on('connect', ()=>{setIsConnected(true)});
+    socket.on('disconnect', ()=>{setIsConnected(false)})
+    socket.on('videos', (newRecord) => {
+             // console.log('New attendance update received:', newRecord);
+              // State ko update karein (naye record ko list mein sabse upar add karein)
+              fetchVideos()
+          });
+  
+          // ✅ IMPORTANT: Cleanup function
+          // Jab component unmount ho, to listeners ko hata dein taki memory leak na ho
+          return () => {
+              socket.off('connect');
+              socket.off('disconnect');
+              socket.off('videos');
+          };
+      }, []); // Empty arra
+      useEffect(() => {
+         // console.log("Connection status:", isConnected);
+      }, [isConnected]);
   // ✅ Fetch all videos from backend
   const fetchVideos = async () => {
     setLoading(true);
     try {
       const res = await videoAPI.getAllVideos();
       console.log(res)
-      setVideos(res.data.data);
+      setVideos(res.data);
     } catch (err) {
       console.error("Error fetching videos:", err);
     } finally {
@@ -41,7 +69,7 @@ export default function VideoManagement() {
 
   // ✅ Handle Add / Update Video
   const handleAddVideo = async () => {
-    await fetchVideos(); // refresh list after saving
+     fetchVideos(); // refresh list after saving
     setShowVideoForm(false);
     setEditingVideo(null);
   };
@@ -50,9 +78,7 @@ export default function VideoManagement() {
   const handleDeleteVideo = async (id) => {
     if (confirm("Are you sure you want to delete this video?")) {
       try {
-        await fetch(`http://localhost:5000/api/videos/${id}`, {
-          method: "DELETE",
-        });
+        const res = await videoAPI.deleteVideo(id);
         await fetchVideos();
       } catch (err) {
         console.error("Error deleting video:", err);
@@ -100,6 +126,8 @@ export default function VideoManagement() {
               setShowVideoForm(false);
               setEditingVideo(null);
             }}
+            id={id}
+            
           />
         )}
       </AnimatePresence>
@@ -139,6 +167,7 @@ export default function VideoManagement() {
                     onClick={() => {
                       setEditingVideo(video);
                       setShowVideoForm(true);
+                      setId(video._id)
                     }}
                     className="text-blue-600 hover:text-blue-800 transition-colors p-2"
                   >

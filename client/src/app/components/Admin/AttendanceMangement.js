@@ -38,7 +38,7 @@ export default function AttendanceManagement() {
   socket.on('connect', ()=>{setIsConnected(true)});
   socket.on('disconnect', ()=>{setIsConnected(false)})
   socket.on('attendance_updated', (newRecord) => {
-            console.log('New attendance update received:', newRecord);
+          //  console.log('New attendance update received:', newRecord);
             // State ko update karein (naye record ko list mein sabse upar add karein)
             setAttendance(newRecord);
         });
@@ -52,7 +52,7 @@ export default function AttendanceManagement() {
         };
     }, []); // Empty arra
     useEffect(() => {
-        console.log("Connection status:", isConnected);
+       // console.log("Connection status:", isConnected);
     }, [isConnected]);
   return (
     <motion.div

@@ -1,8 +1,16 @@
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { FaGraduationCap, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import * as Icons from "react-icons/fa";
 
 export default function Sidebar({ activeTab, setActiveTab, sidebarOpen, setSidebarOpen, navigationItems }) {
+  const router = useRouter()
+  const admin = JSON.parse(localStorage.getItem("admin"));
+  const logout = () =>{
+    localStorage.removeItem("admin");
+    router.push("/AdminLogin")
+    
+  }
   return (
     <motion.div 
       initial={false}
@@ -22,7 +30,7 @@ export default function Sidebar({ activeTab, setActiveTab, sidebarOpen, setSideb
             <FaGraduationCap className="text-purple-600 text-xl" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">Coach Admin</h1>
+            <h1 className="text-xl font-bold text-white">{admin.name}</h1>
             <p className="text-purple-200 text-sm">Management Panel</p>
           </div>
         </motion.div>
@@ -78,7 +86,7 @@ export default function Sidebar({ activeTab, setActiveTab, sidebarOpen, setSideb
             <p className="text-purple-200 text-xs">Administrator</p>
           </div>
         </div>
-        <button className="flex items-center w-full px-4 py-2 text-purple-100 hover:bg-white/10 rounded-xl transition-colors">
+        <button className="flex items-center w-full px-4 py-2 text-purple-100 hover:bg-white/10 rounded-xl transition-colors" onClick={logout}>
           <FaSignOutAlt className="mr-3" />
           Logout
         </button>

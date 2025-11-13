@@ -5,19 +5,19 @@ import { classAPI } from "@/app/lib/class";
 import { videoAPI } from "@/app/lib/Video";
 import toast from "react-hot-toast";
 
-export default function VideoForm({ editingVideo, onSave, onCancel }) {
+export default function VideoForm({ editingVideo, onSave, onCancel}) {
   const [formData, setFormData] = useState({
     title: "",
     classId: "",
     subject: "",
     youtubeLink: "",
     description: "",
-    isFeatured: false, // ✅ New field
+    isFeatured: false// ✅ New field
   });
 
   const [classes, setClasses] = useState([]); // All available classes from backend
   const [subjects, setSubjects] = useState([]); // Subjects related to selected class
-  const [loading, setLoading] = useState(false);
+const [loading, setLoading] = useState(false)
 
   // ✅ Fetch all classes
   const fetchClasses = async () => {
@@ -42,7 +42,7 @@ export default function VideoForm({ editingVideo, onSave, onCancel }) {
         subject: editingVideo.subject || "",
         youtubeLink: editingVideo.youtubeLink || "",
         description: editingVideo.description || "",
-        isFeatured: editingVideo.isFeatured || false, // ✅ load featured
+        isFeatured: editingVideo.isFeatured || false,  
       });
     }
   }, [editingVideo]);
@@ -72,8 +72,11 @@ export default function VideoForm({ editingVideo, onSave, onCancel }) {
 
     try {
       if (editingVideo) {
-        const res = await videoAPI.updateVideo(formData);
+       
+        const res = await videoAPI.updateVideo(formData, editingVideo._id);
         if (res) toast.success(res.message);
+      
+        
       } else {
         const res = await videoAPI.addVideo(formData);
         toast.success(res.message);

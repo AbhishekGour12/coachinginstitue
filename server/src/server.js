@@ -9,8 +9,8 @@ import videoRoutes from './routes/VideoRoutes.js';
 import { dailyAttendanceJob } from './cron/attendanceCron.js';
 import http from 'http';
 import {Server} from 'socket.io'
-
-
+import dashboardRoutes from './routes/DashboardRoutes.js'
+import adminRoutes from './routes/AdminRoutes.js';
 const app = express();
 const server =  http.createServer(app);
 const io = new Server(server, {
@@ -39,6 +39,8 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use("/api/classes", classRoutes);
 app.use("/api/videos", videoRoutes);
+app.use("/api/dashboard", dashboardRoutes)
+app.use("/api/admin", adminRoutes)
 
 dailyAttendanceJob();
 

@@ -19,8 +19,7 @@ export default function Home() {
     const res = await studentAPI.getStudent();
     console.log(res)
     if(res){
-      setUsers(users)
-      console.log(users.length)
+      setUsers(res)
     }
   }
   useEffect(() =>{

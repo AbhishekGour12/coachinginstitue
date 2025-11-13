@@ -199,4 +199,23 @@ const getAttendance = async (req, res) =>{
   res.status(401).json({success: false, message: err.message})
 }
 }
+
+
+export const getRecentStudents = async (req, res) => {
+  try {
+    const recentStudents = await Student.find()
+      .sort({ createdAt: -1 })
+      .limit(4)
+     
+
+    res.json({
+      success: true,
+      data: recentStudents,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching recent students", error: err });
+  }
+};
+
+
 export { registerUser, loginUser, getUserProfile, getUsers, getAttendance };

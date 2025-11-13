@@ -28,6 +28,7 @@ export const videoAPI = {
   // ✅ Add new video
   addVideo: async (videoData) => {
     try {
+      console.log("hello")
       const response = await api.post("/api/videos", videoData);
       return response.data;
     } catch (error) {
@@ -37,9 +38,10 @@ export const videoAPI = {
   },
 
   // ✅ Update video
-  updateVideo: async (videoId, videoData) => {
+  updateVideo: async (formData, id) => {
     try {
-      const response = await api.put(`/api/videos/${videoId}`, videoData);
+      
+      const response = await api.put(`/api/videos/update/${id}`, formData);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
