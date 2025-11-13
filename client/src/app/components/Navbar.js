@@ -1,202 +1,292 @@
-"use client"; // Next.js ke liye zaroori hai (client component)
-
-import React, { useState } from 'react';
-import Image from 'next/image'; // Next.js Image component
-import Link from 'next/link'; // Next.js Link component
-import { FaGears } from "react-icons/fa6";
-
-// CSS file import karein
-import '../CSS/common.css';
+"use client";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess } from '../store/features/authSlice';
+import '../CSS/common.css';
 
-// Hardcoded data (jaisa aapne kaha tha)
-const hardcodedCourses = [
-    { name: "Physics", id: "1" },
-    { name: "Chemistry", id: "2" },
-    { name: "Mathematics", id: "3" },
-    { name: "Communication", id: "4" },
-];
-
-
+// React Icons
+import { 
+  FaUser, 
+  FaSignInAlt, 
+  FaUserPlus, 
+  FaBars, 
+  FaTimes,
+  FaBook,
+  FaInfoCircle,
+  FaEnvelope,
+  FaHome,
+  FaCog,
+  FaHouseUser
+} from 'react-icons/fa';
+import { IoLogOut } from "react-icons/io5";
 
 export default function Navbar() {
-    const [ishovered, setIshovered] = useState(false);
-    const [courses, setCourses] = useState(hardcodedCourses); // Hardcoded data use kiya
-    const [login, setLogin] = useState(false);
-    const dispatch = useDispatch();
-    const user = useSelector((state) => state.auth)
-   // Default state, aap isse manage kar sakte hain
-  console.log(user)
-    function hovered() {
-        setIshovered(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth);
+  
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Handle escape key for menu
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    dispatch(loginSuccess(""));
+    closeMenu();
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
+  const handleCourseClick = (e) => {
+    if (!user.user) {
+      e.preventDefault();
+      alert('Please login first to access courses!');
     }
+  };
 
-    function unhovered() {
-        setIshovered(false);
-    }
+  return (
+    <>
+      <nav 
+        className={`navbar fixed top-0 left-0 right-0 z-50 flex items-center justify-between font-sans transition-all duration-300 ${
+          isScrolled 
+            ? 'bg-white/95 backdrop-blur-md shadow-2xl shadow-purple-500/10 py-2' 
+            : 'bg-white shadow-lg shadow-purple-500/5 py-4'
+        }`}
+      >
+        {/* Logo Section */}
+        <div className="flex items-center sm:ml-8 max-sm:ml-4 flex-shrink-0">
+          <Link href="/" className="logo transition-transform duration-300 hover:scale-105">
+            <Image
+              src="/MJDLOGO.png"
+              alt="MJD Education Logo"
+              width={160}
+              height={60}
+              className="w-40 h-auto object-contain cursor-pointer"
+              priority
+            />
+          </Link>
+        </div>
 
-    // Dummy function (search logic hata diya)
-    function search() {
-        console.log("Search clicked");
-    }
+        {/* Desktop Navigation - Centered with proper spacing */}
+        <div className="hidden lg:flex items-center justify-center flex-1 mx-12">
+          <div className="flex items-center justify-between space-x-16 text-purple-700 font-medium">
+            <Link 
+              href="/" 
+              className="nav-link group flex items-center space-x-3 transition-all duration-200 hover:text-purple-900 hover:font-semibold px-4 py-2 rounded-lg hover:bg-purple-50 min-w-[120px] justify-center"
+            >
+              <FaHouseUser className="text-lg group-hover:scale-110 transition-transform" />
+              <span className="whitespace-nowrap">Home</span>
+            </Link>
+            
+            <Link 
+              href="/Contact" 
+              className="nav-link group flex items-center space-x-3 transition-all duration-200 hover:text-purple-900 hover:font-semibold px-4 py-2 rounded-lg hover:bg-purple-50 min-w-[120px] justify-center"
+            >
+              <FaEnvelope className="text-lg group-hover:scale-110 transition-transform" />
+              <span className="whitespace-nowrap">Contact Us</span>
+            </Link>
+            
+            <Link 
+              href="/About" 
+              className="nav-link group flex items-center space-x-3 transition-all duration-200 hover:text-purple-900 hover:font-semibold px-4 py-2 rounded-lg hover:bg-purple-50 min-w-[120px] justify-center"
+            >
+              <FaInfoCircle className="text-lg group-hover:scale-110 transition-transform" />
+              <span className="whitespace-nowrap">About</span>
+            </Link>
+            
+            <Link 
+              href="/Course" 
+              onClick={handleCourseClick}
+              className={`nav-link group flex items-center space-x-3 transition-all duration-200 px-4 py-2 rounded-lg hover:bg-purple-50 min-w-[120px] justify-center ${
+                user.user 
+                  ? 'hover:text-purple-900 hover:font-semibold' 
+                  : 'cursor-not-allowed opacity-70'
+              }`}
+            >
+              <FaBook className="text-lg group-hover:scale-110 transition-transform" />
+              <span className="whitespace-nowrap">Course</span>
+            </Link>
+          </div>
+        </div>
 
-    // Dummy function (logout logic hata diya)
-    function logout() {
-        
-        setLogin(false);
-        localStorage.removeItem('token');
-        dispatch(loginSuccess(""))
-        document.querySelector('.profile').style.display = "none";
-    }
+        {/* Desktop Auth Section */}
+        <div className="hidden lg:flex items-center space-x-4 mr-8 flex-shrink-0">
+          {user.user ? (
+            <div className="flex items-center space-x-6">
+              {/* Logout Button */}
+              <button
+                onClick={logout}
+                className="logout-btn group flex items-center space-x-2 px-4 py-2 rounded-xl border-2 border-purple-600 bg-white text-purple-700 font-semibold hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-all duration-200 shadow-md hover:shadow-lg"
+              >
+                <IoLogOut className="text-xl group-hover:scale-110 transition-transform" />
+                <span>Logout</span>
+              </button>
 
-    // Dummy function
-    function showProfile() {
-        document.querySelector('.profile').style.display = "block"
-    }
-
-    // Dummy function (navigation logic hata diya)
-    function courses_detail(id) {
-        console.log("Course detail for ID:", id);
-        // Yahan aap Next.js 'useRouter' ka use karke navigation kar sakte hain
-    }
-
-    // Yeh `.coursetype` element ko dikhane ke liye logic
-      const sidebar_open = () =>{
-         document.getElementById('sidebar').classList.add("sidebar")
-      }
-
-    return (
-        <>
-            <div className='navbar  z-10 flex items-center justify-between font-sans text-black' style={{ backgroundColor: 'white', boxShadow: 'rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px' }}>
-
-                {/* Frame-1 */}
-                <div className='flex justify-between h-full items-center sm:ml-8 max-sm:ml-0'>
-
-                    {/* Logo */}
-                    <div className='logo sm:mr-5 sm:ml-7 max-sm:ml-4 max-sm:mr-3'>
-                        
-                        <Link href="/">
-                            <Image
-                                src="/MJDLOGO.png" // Path 'public' folder se start hota hai
-                                alt="Logo"
-                                width={700} // Width provide karna zaroori hai
-                                height={700} // Height provide karna zaroori hai
-                                className='w-full h-auto'
-                            // style={{ maxHeight: '30px' }} // Max-height inline apply kar diya
-                            />
-                        </Link>
-                    </div>
-                    {/* <div className="max-w-[160px] h-[20px] border">
-                        <Link href="/"> 
-                        <Image
-                            src="/logo.png"
-                            alt="LOGO"
-                            width={100}
-                            height={100}
-                            className="w-full h-fit"
-                        />
-                        </Link>
-                    </div> */}
-
-                    <div className='h-12 relative  '>
-                        {/* courses and hovered div */}
-                        <div className='relative ' onMouseOver={hovered} style={{ marginTop: '10px' }}>
-                            {/*hoveredDiv*/}
-                            {(ishovered &&
-                                <div className='flex absolute text-lg text-white ' onMouseLeave={unhovered} style={{ top: '175%', fontWeight: '500', zIndex: 9999 }}>
-                                    <div className='' style={{ width: '250px' }}>
-
-                                        {/*Section 2 */}
-                                        {courses ? courses.map(Element => (
-                                            <div key={Element.id} className=' group flex rounded-md  border-2 border-purple-300 hover:border-purple-50 justify-between items-center pl-6 pr-6 max-sm:pl-2.5 max-sm:pr-2.5  hover:bg-purple-200 bg-purple-50 hover:cursor-pointer' style={{ height: '50px' }} >
-                                                <div className=''>
-                                                    <a className='hover:no-underline  text-gray-600 group-hover:text-purple-600' href="#">{Element.name}</a>
-                                                </div>
-                                                <div>
-                                                    <i className='fa-solid fa-angle-right text-purple-400 group-hover:text-purple-600'></i>
-                                                </div>
-                                            </div>
-                                        )) : ''}
-                                    </div>
-
-
-                                </div>
-                            )}
-
-                            {/* Courses */}
-                            <div className='w-24 text-lg flex items-center font-inter relative cursor-pointer' style={{ fontWeight: '500' }} >
-                                <div className={`flex items-center gap-2 ${ishovered ? 'text-purple-900' : 'text-white'}`}> {/*headline*/}
-
-                                    <Link href="/Courses"><p className=' mr-2 text-purple-600' >Courses</p></Link>
-                                </div>
-                                <div> {/*arrow icon*/}
-                                    <i className={`fa-solid text-purple-400 text-sm fa-angle-right transition-transform duration-200 ${ishovered ? 'rotate-90 ' : ''} `}></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              {/* User Profile */}
+              <div className="user-profile flex items-center space-x-3 bg-purple-50 px-4 py-2 rounded-xl border border-purple-200">
+                <div className="user-avatar bg-purple-600 text-white p-2 rounded-full">
+                  <FaUser className="text-lg" />
                 </div>
-
-                {/* Search Bar*/}
-                <div className='max-sm:hidden w-fit flex justify-around items-center rounded-full font-inter ' style={{ backgroundColor: '#ECE6F0' }}>
-                    <div className=''> {/*Input box */}
-                        <input className='w-64 h-10 max-lg:h-10 max-lg:w-52 rounded-tl-full rounded-bl-full pl-5 pr-3 text-base placeholder-gray-500 outline-none' type="text" style={{ backgroundColor: '#ECE6F0' }} placeholder='Search' />
-                    </div>
-                    <div className=' search-bar w-fit text-lg mr-5'>
-                        <i className=" magnify rounded-full max-lg:text-sm fa-solid fa-magnifying-glass cursor-pointer text-black" onClick={search}></i>
-                    </div>
+                <div className="user-info">
+                  <p className="text-purple-900 font-semibold text-sm">
+                    {user.user.name}
+                  </p>
+                  <p className="text-purple-600 text-xs">Student</p>
                 </div>
-
-                {/* Category */}
-                <div className='Category flex justify-between items-center text-purple-600 font-inter text-lg max-lg:hidden' style={{ fontWeight: '500' }}>
-                    <div className='mr-7'>
-                        <Link href="/Contact" className='cursor-pointer hover:no-underline hover:text-purple-800 hover:font-medium' >Contact Us</Link>
-                    </div>
-                    <div className='mr-7'>
-                        <Link href="/About" className='hover:no-underline cursor-pointer hover:text-purple-800 hover:font-medium' >About</Link>
-                    </div>
-                    <div className='mr-7'>
-                        <Link href="/successtories" className='hover:no-underline cursor-pointer hover:text-purple-800 hover:font-medium' >Courses</Link>
-                    </div>
-                </div>
-
-                {/* Porfile Login Signup */}
-                <div className='flex justify-between  items-center h54-12 font-normal text-purple-600  text-lg mr-8  max-xl:hidden   '>
-                    {user.user ? <div className='flex items-center'>
-                        <div className='text-purple-900 '>
-                            <button className=' h-10 rounded-lg cursor-pointer bg-gray-300 hover:bg-purple-600 border-2 border-purple-700 hover:border-gray-300 font-semibold  mr-8 hover:text-white font-sans' style={{ fontSize: '17px', width: '90px' }} onClick={logout}>Log out</button>
-                        </div>
-                        <div className='h-full flex items-center mr-3 '>
-                            <i className=" cursor-pointer fa-regular fa-circle-user  hover:bg-gray-200 rounded-circle rounded-full " style={{ fontSize: '39px' }} ></i>
-                            {/* <i className=" cursor-pointer fa-regular fa-circle-user  hover:bg-gray-200 rounded-circle rounded-full " style={{ fontSize: '39px' }} onMouseOver={showProfile}></i> */}
-                            <p className='ml-3'>{user.user.name}</p>
-                        </div>
-                    </div> : <div className='flex'>
-                        <div className='text-purple-800'>
-                            <Link href="/Login">  <button className='signin-n cursor-pointer transition-all  ease-in-out  h-10 rounded-lg  border-2 border-purple-600 hover:border-purple-300  mr-8 hover:text-white font-sans bg-purple-300 hover:bg-purple-500 ' style={{ width: '90px', fontWeight: '500' }}>Log In</button> </Link>
-                        </div>
-                        <div className=' rounded-lg bg-purple-100'><div>
-                            <Link href="/Signup" > <button className='cursor-pointer h-10 rounded-lg transition-all duration-200 ease-in-out  border-2 border-purple-600 hover:border-purple-300  text-blue-900 hover:text-white font-sans hover:bg-purple-600' style={{ width: '90px', fontWeight: '500' }}>Sign up</button></Link>
-                            {/* <Link href="/SignIn" > <button className='cursor-pointer h-10 rounded-lg transition-all duration-200 ease-in-out  border-2 border-purple-600 hover:border-purple-300  text-purple-500 hover:text-white font-sans hover:bg-purple-600' style={{ width: 'fit-content', fontWeight: '500' }}>SiIn</button></Link> */}
-                        </div>
-                        </div>
-                    </div>
-                    }
-
-                    {/* Profile Section - Yeh abhi bhi hidden rahega jab tak logic add na ho */}
-                    <div className="profile" style={{ display: 'none', position: 'absolute', top: '70px', right: '10px', backgroundColor: 'white', border: '1px solid #ccc', zIndex: 100 }} >
-                        <p>Profile Menu</p>
-                        {/* Yahan aapka hardcoded profile component aa sakta hai */}
-                    </div>
-
-                </div>
-
-                {/* Hamburger Icon */}
-                <div className='hidden items-center max-xl:flex mr-6 text-2xl' >
-                    <i className="fa-solid fa-bars" onClick={sidebar_open}></i>
-                </div>
+              </div>
             </div>
-        </>
-    )
+          ) : (
+            <div className="flex items-center space-x-4">
+              {/* Login Button */}
+              <Link href="/Login">
+                <button className="login-btn group flex items-center space-x-2 px-6 py-2 rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105">
+                  <FaSignInAlt className="text-lg group-hover:scale-110 transition-transform" />
+                  <span>Login</span>
+                </button>
+              </Link>
+
+              {/* Signup Button */}
+              <Link href="/Signup">
+                <button className="signup-btn group flex items-center space-x-2 px-6 py-2 rounded-xl border-2 border-purple-600 bg-white text-purple-700 font-semibold hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-all duration-200 shadow-md hover:shadow-lg">
+                  <FaUserPlus className="text-lg group-hover:scale-110 transition-transform" />
+                  <span>Sign Up</span>
+                </button>
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className={`lg:hidden mr-6 text-2xl p-3 rounded-2xl transition-all duration-300 ${
+            menuOpen
+              ? 'bg-purple-600 text-white rotate-180'
+              : 'text-purple-700 bg-purple-50 hover:bg-purple-100'
+          }`}
+        >
+          {menuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="absolute top-full right-4 mt-2 w-72 bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl border border-purple-200 animate-fadeIn z-50 overflow-hidden">
+            <div className="flex flex-col py-4">
+              {/* Mobile Navigation Links */}
+              <Link
+                href="/"
+                onClick={closeMenu}
+                className="mobile-nav-link group flex items-center space-x-3 px-6 py-4 text-purple-700 font-semibold hover:bg-purple-50 transition-all duration-200"
+              >
+                <FaHome className="text-lg group-hover:scale-110 transition-transform" />
+                <span>Home</span>
+              </Link>
+
+              <Link
+                href="/Contact"
+                onClick={closeMenu}
+                className="mobile-nav-link group flex items-center space-x-3 px-6 py-4 text-purple-700 font-semibold hover:bg-purple-50 transition-all duration-200"
+              >
+                <FaEnvelope className="text-lg group-hover:scale-110 transition-transform" />
+                <span>Contact Us</span>
+              </Link>
+
+              <Link
+                href="/About"
+                onClick={closeMenu}
+                className="mobile-nav-link group flex items-center space-x-3 px-6 py-4 text-purple-700 font-semibold hover:bg-purple-50 transition-all duration-200"
+              >
+                <FaInfoCircle className="text-lg group-hover:scale-110 transition-transform" />
+                <span>About</span>
+              </Link>
+
+              <Link
+                href="/Course"
+                onClick={(e) => {
+                  handleCourseClick(e);
+                  closeMenu();
+                }}
+                className={`mobile-nav-link group flex items-center space-x-3 px-6 py-4 ${
+                  user.user 
+                    ? 'text-purple-700 hover:bg-purple-50' 
+                    : 'text-gray-400 cursor-not-allowed'
+                } font-semibold transition-all duration-200`}
+              >
+                <FaBook className="text-lg group-hover:scale-110 transition-transform" />
+                <span>Course</span>
+              </Link>
+
+              {/* Mobile Auth Section */}
+              <div className="border-t border-purple-100 mt-2 pt-2">
+                {user.user ? (
+                  <>
+                    <div className="px-6 py-3 flex items-center space-x-3 bg-purple-50 mx-4 rounded-xl mb-3">
+                      <div className="user-avatar bg-purple-600 text-white p-2 rounded-full">
+                        <FaUser className="text-sm" />
+                      </div>
+                      <div>
+                        <p className="text-purple-900 font-semibold text-sm">
+                          {user.user.name}
+                        </p>
+                        <p className="text-purple-600 text-xs">Welcome back!</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={logout}
+                      className="mobile-nav-link group flex items-center space-x-3 px-6 py-4 text-red-600 font-semibold hover:bg-red-50 transition-all duration-200 w-full text-left"
+                    >
+                      <IoLogOut className="text-lg group-hover:scale-110 transition-transform" />
+                      <span>Logout</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/Login"
+                      onClick={closeMenu}
+                      className="mobile-nav-link group flex items-center space-x-3 px-6 py-4 text-purple-700 font-semibold hover:bg-purple-50 transition-all duration-200"
+                    >
+                      <FaSignInAlt className="text-lg group-hover:scale-110 transition-transform" />
+                      <span>Login</span>
+                    </Link>
+                    <Link
+                      href="/Signup"
+                      onClick={closeMenu}
+                      className="mobile-nav-link group flex items-center space-x-3 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold hover:from-purple-600 hover:to-purple-700 transition-all duration-200 mx-4 rounded-xl mt-2 justify-center"
+                    >
+                      <FaUserPlus className="text-lg group-hover:scale-110 transition-transform" />
+                      <span>Sign Up Free</span>
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Add some spacing for fixed navbar */}
+      <div className="h-20"></div>
+    </>
+  );
 }

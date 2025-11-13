@@ -31,7 +31,9 @@ export const authAPI = {
     // Get current user profile
     getProfile: async (token) => {
         try {
-            const response = await api.get(`/api/auth/${token}`, {
+            console.log(token)
+            const response = await api.get(`/api/auth/profile/
+                ${token}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -51,7 +53,7 @@ export const authAPI = {
             throw error.response?.data || error.message;
         }
     },
-
+    
     // Change password
     changePassword: async (passwordData) => {
         try {
@@ -61,6 +63,10 @@ export const authAPI = {
             throw error.response?.data || error.message;
         }
     },
+   
+   
+
+    
 
     // Logout user (client-side only)
     logout: () => {

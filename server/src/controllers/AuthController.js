@@ -1,6 +1,8 @@
 import User from "../model/User.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import Student from "../model/Student.js";
+import Attendance from "../model/Attendance.js";
 // Generate JWT
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET|| "123456", {
@@ -32,8 +34,17 @@ const registerUser = async (req, res) => {
             stream: stream ? stream : '',
             phone: number
         })
-        await user.save()
-        console.log(user)
+        await user.save();
+        const obj = new Student({
+            name,
+            email,
+            grade: classes,
+            stream: stream ? stream : '',
+            phone: number,
+
+
+        })
+        await obj.save()
         if (user) {
             res.status(201).json({
                 data: {
@@ -57,49 +68,107 @@ const registerUser = async (req, res) => {
 
 // @desc    Authenticate user & get token
 // @route   POST /api/auth/login
-const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+ const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  const io = req.io;
 
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ message: "Invalid email address" });
 
-    try {
-        const user = await User.findOne({ email: email });
-        if (!user) {
-            res.status(401).json({ success: false, message: 'Invalid email' });
-            return;
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch)
+      return res.status(401).json({ message: "Incorrect password" });
 
-        }
+    // 🎓 Attendance logic for students
+    if (user.role === "user") {
+      const student = await Student.findOne({ email });
+      if (student) {
+        // 🕒 Set start & end of today (midnight to midnight)
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
 
-        const hashPassword = await bcrypt.compare(password, user.password);
+        student.lastLogin = new Date();
 
+        // ✅ Find attendance for today by date range (fixes double creation)
+        let existingAttendance = await Attendance.findOne({
+          student: student._id,
+          date: { $gte: startOfDay, $lte: endOfDay },
+        });
 
-        if (user && hashPassword) {
-            res.json({
-                success: true,
-                user: {
-                    _id: user._id,
-                    user: user.name,
-                    email: user.email,
-                   
-                    token: generateToken(user._id),
-                },
-                message: "login successfully"
+        if (!existingAttendance) {
+          // 🟢 First login today → create attendance only once
+          existingAttendance = await Attendance.create({
+            student: student._id,
+            grade: student.grade,
+            date: new Date(),
+            status: "Present",
+            name: student.name,
+            lastLoginTime: new Date(),
+          });
 
-            });
+          // Update attendance stats only once per day
+          student.totalDays = await Attendance.countDocuments({
+            student: student._id,
+          });
+          student.totalPresent = await Attendance.countDocuments({
+            student: student._id,
+            status: "Present",
+          });
+          student.attendancePercentage =
+            (student.totalPresent / student.totalDays) * 100;
         } else {
-            res.status(401).json({ success: false, message: 'Invalid password' });
+          // 🟦 Already logged in today → update time only
+          existingAttendance.lastLoginTime = new Date();
+          existingAttendance.date = new Date(); // update latest login timestamp
         }
-    } catch (err) {
-        res.status(401).json({ success: false, message: err.message });
-        console.log(err.message)
 
+        await student.save();
+        await existingAttendance.save();
+
+        // 🔄 Emit updated data every login
+        const result = await Attendance.find();
+        io.emit("attendance_updated", result);
+      }
     }
+
+    // 🔑 Generate token
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      message: "Login successful",
+      data: {
+        token,
+        role: user.role,
+        name: user.name,
+        email: user.email,
+        classes: user.classes
+      },
+    });
+  } catch (err) {
+    console.log("Login error:", err);
+    res.status(500).json({ message: err.message });
+  }
 };
+
+
 
 const getUserProfile = async (req, res) =>{
     try{
-    const token = req.params.token;
-    const id = jwt.decode(token, process.env.JWT_SECRET || "123456");
-    const result = await User.findById(id.id).select('-password');
+       
+   let token =  req.headers.authorization;
+if (token.startsWith("Bearer ")) {
+  token = token.split(" ")[1]; // get only actual token part
+}
+
+const decoded = jwt.verify(token, process.env.JWT_SECRET || "123456");
+ // will show { id: "...", iat: ..., exp: ... }
+
+ // ✅ now should return decoded payload
+
+    const result = await User.findById(decoded.id).select('-password');
     res.status(200).json({user: result});
 } catch (error) {
     res.status(401).json({ success: false, message: error.message });
@@ -107,4 +176,27 @@ const getUserProfile = async (req, res) =>{
 }
 }
 
-export { registerUser, loginUser, getUserProfile };
+const getUsers = async (req, res) =>{
+    try{
+      
+        const result = await Student.find();
+       
+        res.status(200).json(result);
+
+    }catch(err){
+        res.status(401).json({success: false, message: err.message});
+    }
+}
+
+const getAttendance = async (req, res) =>{
+  try{
+  const response = await Attendance.find();
+  console.log(response)
+  if(response){
+    res.status(200).json(response);
+  }
+}catch(err){
+  res.status(401).json({success: false, message: err.message})
+}
+}
+export { registerUser, loginUser, getUserProfile, getUsers, getAttendance };

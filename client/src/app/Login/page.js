@@ -1,6 +1,6 @@
 
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SidebarImg from '../components/SidebarImg';
 import Link from 'next/link';
 import axios from 'axios';
@@ -12,8 +12,8 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../store/features/authSlice';
 
-
 export default function page() {
+   
 
   const [formData, setFormData] = useState({
     email: "",
@@ -57,9 +57,10 @@ export default function page() {
         setFormData({ email: "",  password: "" });
         setStudentclass("");
         setStream("");
-        localStorage.setItem("token", response.user.token);
         
-        dispatch(loginSuccess(response.user))
+        localStorage.setItem("token", response.data.token);
+        
+        dispatch(loginSuccess(response.data))
         setTimeout(() => {
           router.push("/");
         }, 2000);
