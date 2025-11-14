@@ -27,7 +27,18 @@ const CoursePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 const [loading, setLoading] = useState(user?.classes ? true : false);
 
+
+
   const lectureRef = useRef();
+
+  useEffect(() => {
+    if (selectedSubject && lectureRef.current) {
+      lectureRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      })
+    }
+  }, [selectedSubject])
  
 
  useEffect(() => {

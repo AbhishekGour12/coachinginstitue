@@ -28,6 +28,10 @@ export default function VideoManagement() {
   const [id, setId] = useState();
   const [isConnected, setIsConnected] = useState(false)
   const {filter} = useVideoFilter();
+  const [searchTitle, setSearchTitle] = useState("");
+const [searchSubject, setSearchSubject] = useState("");
+const [searchClass, setSearchClass] = useState("");
+const [searchDate, setSearchDate] = useState("");
 
   useEffect(() =>{
     socket.on('connect', ()=>{setIsConnected(true)});
@@ -62,6 +66,20 @@ export default function VideoManagement() {
       setLoading(false);
     }
   };
+  const filteredVideos = videos?.filter((v) => {
+  const matchTitle = v.title.toLowerCase().includes(searchTitle.toLowerCase());
+  const matchSubject = v.subject.toLowerCase().includes(searchSubject.toLowerCase());
+  const matchClass =
+    v.classId?.className?.toLowerCase().includes(searchClass.toLowerCase());
+
+  const matchDate =
+    searchDate === "" ||
+    v.uploadDate === searchDate ||
+    new Date(v.uploadDate).toLocaleDateString("en-CA") === searchDate;
+
+  return matchTitle && matchSubject && matchClass && matchDate;
+});
+
 
   useEffect(() => {
     fetchVideos();
@@ -134,10 +152,50 @@ export default function VideoManagement() {
 
       {/* Loading */}
       {loading && <p className="text-gray-500">Loading videos...</p>}
+{/* FILTERS */}
+<div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white p-4 rounded-2xl shadow">
+  
+  {/* Search Title */}
+  <input
+    type="text"
+    placeholder="Search by Title"
+    value={searchTitle}
+    onChange={(e) => setSearchTitle(e.target.value)}
+    className="px-4 py-2 border rounded-xl shadow-sm focus:ring-2 focus:ring-purple-500"
+  />
+
+  {/* Search Subject */}
+  <input
+    type="text"
+    placeholder="Search by Subject"
+    value={searchSubject}
+    onChange={(e) => setSearchSubject(e.target.value)}
+    className="px-4 py-2 border rounded-xl shadow-sm focus:ring-2 focus:ring-purple-500"
+  />
+
+  {/* Search Class */}
+  <input
+    type="text"
+    placeholder="Search by Class (ex: 10th)"
+    value={searchClass}
+    onChange={(e) => setSearchClass(e.target.value)}
+    className="px-4 py-2 border rounded-xl shadow-sm focus:ring-2 focus:ring-purple-500"
+  />
+
+  {/* Filter by Upload Date */}
+  <input
+    type="date"
+    value={searchDate}
+    onChange={(e) => setSearchDate(e.target.value)}
+    className="px-4 py-2 border rounded-xl shadow-sm focus:ring-2 focus:ring-purple-500"
+  />
+
+</div>
 
       {/* Videos Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {videos?videos.map((video, index) => (
+        {filteredVideos?filteredVideos.map((video, index) => (
+
           <motion.div
             key={video._id}
             initial={{ opacity: 0, y: 20 }}

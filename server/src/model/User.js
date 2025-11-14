@@ -11,7 +11,8 @@ const UserSchema = new mongoose.Schema({
     phone: {type: Number, length: 10},
     classes: { type: String, required: true },
     stream: { type: String },
-    role: {type: String, enum: ['user', 'admin'], default: 'user'}
+    role: {type: String, enum: ['user', 'admin'], default: 'user'},
+    payment: {type: Boolean, default: false}
 }, { timestamps: true });
 
 const User = mongoose.model("User", UserSchema);

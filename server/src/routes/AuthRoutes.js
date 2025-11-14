@@ -5,7 +5,8 @@ import {
   getUserProfile,
   getUsers,
   getAttendance,
-  getRecentStudents
+  getRecentStudents,
+  contact
 } from "../controllers/AuthController.js";
 
 const router = express.Router();
@@ -16,7 +17,7 @@ router.get("/profile/:token", getUserProfile);
 router.get("/students", getUsers);
 router.get("/attendance", getAttendance);
 router.get("/recent", getRecentStudents);
-
+router.post("/contact", contact)
  // for admin
 
 export default router;

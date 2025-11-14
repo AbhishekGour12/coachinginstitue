@@ -4,6 +4,8 @@ import { studentAPI } from "../../lib/student";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 export default function StudentsManagement() {
   const [students, setStudents] = useState([]);
@@ -29,6 +31,44 @@ export default function StudentsManagement() {
   const closeModal = () => {
     setSelectedStudent(null);
   };
+const exportToExcel = () => {
+  if (!students || students.length === 0) return;
+
+  // Convert students data into sheet data format
+  const excelData = students.map((s, i) => ({
+    "S. No.": i + 1,
+    "Name": s.name,
+    "Email": s.email,
+    "Phone": s.phone || "N/A",
+    "Grade / Class": s.grade,
+    "Total Present Days": s.totalPresent || 0,
+    "Total Days": s.totalDays || 0,
+    "Attendance %": s.attendancePercentage?.toFixed(1) + "%" || "0%",
+    "Last Login": s.lastLogin
+      ? new Date(s.lastLogin).toLocaleString()
+      : "—",
+  }));
+
+  // Create a worksheet
+  const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+  // Create a workbook
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+
+  // Export
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+
+  // Download file
+  const file = new Blob([excelBuffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+
+  saveAs(file, "students-attendance.xlsx");
+};
 
   return (
     <motion.div
@@ -44,6 +84,16 @@ export default function StudentsManagement() {
         </h1>
         <p className="text-gray-600">View and manage all registered students</p>
       </div>
+<div className="flex justify-end">
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={exportToExcel}
+    className="px-4 py-2 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition-all"
+  >
+    Export Excel
+  </motion.button>
+</div>
 
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">

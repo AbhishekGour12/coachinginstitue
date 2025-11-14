@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import Navbar from "../components/Navbar";
+import Link from "next/link";
 
 // Animation variants
 const fadeInUp = {
@@ -148,7 +149,10 @@ export default function Page() {
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-full font-medium transition shadow-lg hover:shadow-xl"
             >
-              Join Us <ArrowRight className="ml-2 w-4 h-4" />
+              <Link href="/Contact">
+              Join Us
+              </Link>
+               <ArrowRight className="ml-2 w-4 h-4" />
             </motion.button>
           </motion.div>
 

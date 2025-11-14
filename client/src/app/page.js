@@ -176,12 +176,12 @@ export default function Home() {
             <div className="mt-8 flex justify-center space-x-6">
               <a href="https://www.instagram.com/mjd_classes?igsh=enFubWR3eHNtM3Ns" className="hover:scale-110 transition-transform duration-300">
                 <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
-                  <span className="font-bold"><FaInstagram/></span>
+                  <span className="font-bold "><FaInstagram className="text-4xl"/></span>
                 </div>
               </a>
               <a href="https://www.facebook.com/share/16PkLxHDHG/" className="hover:scale-110 transition-transform duration-300">
                 <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-                  <span className="font-bold"><FaFacebook/></span>
+                  <span className="font-bold"><FaFacebook className="text-4xl"/></span>
                 </div>
               </a>
             </div>

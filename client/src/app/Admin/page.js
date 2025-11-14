@@ -10,29 +10,15 @@ import AttendanceManagement from "../components/Admin/AttendanceMangement";
 import VideoManagement from "../components/Admin/VideoManagement";
 import WebsiteManagement from "../components/Admin/WebsiteManagement";
 import Settings from "../components/Admin/Setting";
+import { studentAPI } from "../lib/student";
+import io  from 'socket.io-client';
 
+
+const socket = io(process.env.NEXT_PUBLIC_API_URL ,{
+  transports: ["websocket"],
+})
 // Available grades and subjects
-export const availableGrades = [
-  { value: "1", label: "Grade 1" },
-  { value: "2", label: "Grade 2" },
-  { value: "3", label: "Grade 3" },
-  { value: "4", label: "Grade 4" },
-  { value: "5", label: "Grade 5" },
-  { value: "6", label: "Grade 6" },
-  { value: "7", label: "Grade 7" },
-  { value: "8", label: "Grade 8" },
-  { value: "9", label: "Grade 9" },
-  { value: "10", label: "Grade 10" },
-  { value: "11", label: "Grade 11" },
-  { value: "12", label: "Grade 12" }
-];
 
-export const availableSubjects = [
-  "Hindi", "English", "Mathematics", "Science", "Social Studies", 
-  "Physics", "Chemistry", "Biology", "Sanskrit", "English Grammar", 
-  "General Knowledge", "Moral Science", "Computer Science", "Economics",
-  "History", "Geography", "Civics", "Environmental Science"
-];
 
 // Demo data with new structure
 const demoClasses = [
@@ -134,8 +120,10 @@ export default function AdminPanel() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [classes, setClasses] = useState(demoClasses);
   const [students, setStudents] = useState(demoStudents);
-  const [attendance, setAttendance] = useState(demoAttendance);
   const [videos, setVideos] = useState(demoVideos);
+  const [admin, setAdmin] = useState();
+  const [attendance, setAttendance] = useState();
+  
   const [notifications, setNotifications] = useState([
     { id: 1, message: "New student registration", time: "5 min ago", read: false },
     { id: 2, message: "Class schedule updated", time: "1 hour ago", read: false },
@@ -171,7 +159,49 @@ export default function AdminPanel() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+ useEffect(() =>{
+  if(localStorage.getItem("admin")){
+    setAdmin(JSON.parse(localStorage.getItem("admin")));
+  }
+ fetchAttendace()
 
+ },[])
+ const fetchAttendace = async() =>{
+     try{
+     const res =  await studentAPI.getAttendance();
+     if(res){
+       setAttendance(res);
+     }
+   }catch(err){
+     console.log(err.message)
+   }
+ 
+ 
+    }
+
+    const [isConnected, setIsConnected] = useState(socket.connected);
+
+ useEffect(() =>{
+  socket.on('connect', ()=>{setIsConnected(true)});
+  socket.on('disconnect', ()=>{setIsConnected(false)})
+  socket.on('attendance_updated', (newRecord) => {
+          //  console.log('New attendance update received:', newRecord);
+            // State ko update karein (naye record ko list mein sabse upar add karein)
+            setAttendance(newRecord);
+        });
+
+        // ✅ IMPORTANT: Cleanup function
+        // Jab component unmount ho, to listeners ko hata dein taki memory leak na ho
+        return () => {
+            socket.off('connect');
+            socket.off('disconnect');
+            socket.off('attendance_updated');
+        };
+    }, []); // Empty arra
+    useEffect(() => {
+       // console.log("Connection status:", isConnected);
+    }, [isConnected]);
+ 
   // Stats for dashboard
   const stats = {
     totalClasses: classes.length,
@@ -199,8 +229,7 @@ export default function AdminPanel() {
           <ClassesManagement 
             classes={classes} 
             setClasses={setClasses} 
-            availableGrades={availableGrades}
-            availableSubjects={availableSubjects}
+          
           />
         );
       case "students":
@@ -241,6 +270,7 @@ export default function AdminPanel() {
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         navigationItems={navigationItems}
+        admin={admin}
       />
 
       {/* Main Content */}
@@ -251,6 +281,7 @@ export default function AdminPanel() {
           setSidebarOpen={setSidebarOpen}
           navigationItems={navigationItems}
           notifications={notifications}
+          admin={admin}
         />
 
         {/* Main Content Area */}

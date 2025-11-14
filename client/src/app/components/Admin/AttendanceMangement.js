@@ -3,57 +3,32 @@ import { authAPI } from "@/app/lib/auth";
 import { studentAPI } from "@/app/lib/student";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import io  from 'socket.io-client';
+
+export default function AttendanceManagement({attendance}) {
+  console.log(attendance)
+const [searchName, setSearchName] = useState("");
+const [searchClass, setSearchClass] = useState("");
+const [searchDate, setSearchDate] = useState("");
 
 
-const socket = io(process.env.NEXT_PUBLIC_API_URL ,{
-  transports: ["websocket"],
-})
-export default function AttendanceManagement() {
-  console.log(process.env.NEXT_PUBLIC_API_URL)
-
-
-  const [attendance, setAttendance] = useState();
   
-  useEffect(() =>{
-    fetchAttendace()
+// FILTERED DATA
+const filteredAttendance = attendance?.filter((record) => {
+  const name = record?.name || "";
+  const grade = record?.grade || "";
+  const date = record?.date || "";
 
-  },[]);
+  return (
+    name.toLowerCase().includes(searchName.toLowerCase()) &&
+    grade.toLowerCase().includes(searchClass.toLowerCase()) &&
+    (searchDate === "" ||
+      new Date(date).toLocaleDateString("en-CA") === searchDate)
+  );
+});
 
-   const fetchAttendace = async() =>{
-    try{
-    const res =  await studentAPI.getAttendance();
-    if(res){
-      setAttendance(res);
-    }
-  }catch(err){
-    console.log(err.message)
-  }
+   
 
-
-   }
-   const [isConnected, setIsConnected] = useState(socket.connected);
-
- useEffect(() =>{
-  socket.on('connect', ()=>{setIsConnected(true)});
-  socket.on('disconnect', ()=>{setIsConnected(false)})
-  socket.on('attendance_updated', (newRecord) => {
-          //  console.log('New attendance update received:', newRecord);
-            // State ko update karein (naye record ko list mein sabse upar add karein)
-            setAttendance(newRecord);
-        });
-
-        // ✅ IMPORTANT: Cleanup function
-        // Jab component unmount ho, to listeners ko hata dein taki memory leak na ho
-        return () => {
-            socket.off('connect');
-            socket.off('disconnect');
-            socket.off('attendance_updated');
-        };
-    }, []); // Empty arra
-    useEffect(() => {
-       // console.log("Connection status:", isConnected);
-    }, [isConnected]);
+   
   return (
     <motion.div
       key="attendance"
@@ -66,6 +41,35 @@ export default function AttendanceManagement() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Attendance Records</h1>
         <p className="text-gray-600">Track student attendance and punctuality</p>
       </div>
+      {/* FILTERS */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+  {/* Search Name */}
+  <input
+    type="text"
+    placeholder="Search by Student Name"
+    value={searchName}
+    onChange={(e) => setSearchName(e.target.value)}
+    className="px-4 py-2 border rounded-xl shadow-sm focus:ring-2 focus:ring-purple-400"
+  />
+
+  {/* Search Class */}
+  <input
+    type="text"
+    placeholder="Search by Class"
+    value={searchClass}
+    onChange={(e) => setSearchClass(e.target.value)}
+    className="px-4 py-2 border rounded-xl shadow-sm focus:ring-2 focus:ring-purple-400"
+  />
+
+  {/* Filter by Date */}
+  <input
+    type="date"
+    value={searchDate}
+    onChange={(e) => setSearchDate(e.target.value)}
+    className="px-4 py-2 border rounded-xl shadow-sm focus:ring-2 focus:ring-purple-400"
+  />
+</div>
+
       
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
@@ -80,7 +84,8 @@ export default function AttendanceManagement() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {attendance?.map((record, index) => (
+             { filteredAttendance?.length > 0 && filteredAttendance.map((record, index) => (
+
                 <motion.tr
                   key={record._id}
                   initial={{ opacity: 0, y: 20 }}

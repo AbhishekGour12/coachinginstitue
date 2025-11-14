@@ -49,6 +49,7 @@ function Footer() {
             Khandwa Road, Indore M.P. 452020
           </p>
           <p className="text-sm mb-1">Phone: +91 6265866608</p>
+           <p className="text-sm mb-1">Phone: +91 9981209825</p>
           <p className="text-sm">Email: mjdclasses@gmail.com</p>
         </div>
         {/* Social Media */}

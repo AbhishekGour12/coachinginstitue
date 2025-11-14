@@ -44,9 +44,9 @@ export const classAPI = {
   },
 
   // ✅ Update class
-  updateClass: async (classId, classData) => {
+  updateClass: async (id, classData) => {
     try {
-      const response = await api.put(`/api/classes/${classId}`, classData);
+      const response = await api.put(`/api/classes/${id}`, classData);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;

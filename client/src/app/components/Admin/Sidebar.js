@@ -1,15 +1,15 @@
+"use client"
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaGraduationCap, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import * as Icons from "react-icons/fa";
 
-export default function Sidebar({ activeTab, setActiveTab, sidebarOpen, setSidebarOpen, navigationItems }) {
+export default function Sidebar({ activeTab, setActiveTab, sidebarOpen, setSidebarOpen, navigationItems, admin }) {
   const router = useRouter()
-  const admin = JSON.parse(localStorage.getItem("admin"));
   const logout = () =>{
     localStorage.removeItem("admin");
     router.push("/AdminLogin")
-    
   }
   return (
     <motion.div 
@@ -30,7 +30,7 @@ export default function Sidebar({ activeTab, setActiveTab, sidebarOpen, setSideb
             <FaGraduationCap className="text-purple-600 text-xl" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">{admin.name}</h1>
+            <h1 className="text-xl font-bold text-white">{admin?admin.name:''}</h1>
             <p className="text-purple-200 text-sm">Management Panel</p>
           </div>
         </motion.div>

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { FaBars, FaBell } from "react-icons/fa";
 
-export default function TopBar({ activeTab, setSidebarOpen, navigationItems, notifications }) {
+export default function TopBar({ activeTab, setSidebarOpen, navigationItems, notifications, admin }) {
   return (
     <motion.header 
       initial={{ y: -100 }}
@@ -36,7 +36,7 @@ export default function TopBar({ activeTab, setSidebarOpen, navigationItems, not
               <p className="text-xs text-gray-500">Administrator</p>
             </div>
             <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-sm">{JSON.parse(localStorage.getItem("admin")).name.charAt(0).toUpperCase()}</span>
+              <span className="text-white font-bold text-sm">{admin?admin.name.charAt(0).toUpperCase():''}</span>
             </div>
           </motion.div>
         </div>

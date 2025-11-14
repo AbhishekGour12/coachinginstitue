@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import Student from "../model/Student.js";
 import Attendance from "../model/Attendance.js";
+import ContactMessage from "../middleware/emai.js";
 // Generate JWT
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET|| "123456", {
@@ -216,6 +217,64 @@ export const getRecentStudents = async (req, res) => {
     res.status(500).json({ message: "Error fetching recent students", error: err });
   }
 };
+
+export const contact = async (req, res) =>{
+  try{
+    const { name, email, phone, subject, message } = req.body;
+
+const htmlContent = `
+  <div style="font-family: Arial, sans-serif; padding: 20px; background: #f7f7ff;">
+    <div style="max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.08);">
+
+      <h2 style="color: #5a2ec2; text-align: center; margin-bottom: 10px;">
+        📩 New Inquiry from MGD Coaching Classes
+      </h2>
+
+      <p style="font-size: 16px; color: #333;">
+        Hello Admin,  
+        <br><br>
+        You have received a new contact request from your website.
+      </p>
+
+      <div style="margin-top: 20px;">
+        <h3 style="color: #5a2ec2; margin-bottom: 10px;">🧑 User Details</h3>
+        
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+      </div>
+
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+      <div>
+        <h3 style="color: #5a2ec2; margin-bottom: 10px;">📘 Subject</h3>
+        <p style="font-size: 15px;">${subject}</p>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <h3 style="color: #5a2ec2; margin-bottom: 10px;">💬 Message</h3>
+        <p style="font-size: 15px; line-height: 1.6; color: #333;">
+          ${message}
+        </p>
+      </div>
+
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
+
+      <p style="text-align: center; color: #6c6c6c; font-size: 13px;">
+        © ${new Date().getFullYear()} MGD Coaching Classes. All Rights Reserved.
+      </p>
+
+    </div>
+  </div>
+`;
+  await ContactMessage(email, subject,  htmlContent);
+  res.status(200).json({success: true, message: "Thank you for contacting MGD Coaching Classes! We have received your message. Our team will get in touch with you shortly."})
+          
+  }catch(err){
+    console.log(err.message)
+    res.status(400).json({success: false, message: err.message});
+  }
+}
 
 
 export { registerUser, loginUser, getUserProfile, getUsers, getAttendance };

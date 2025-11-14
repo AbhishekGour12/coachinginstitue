@@ -1,3 +1,4 @@
+
 import api from './api';
 
 export const authAPI = {
@@ -62,6 +63,16 @@ export const authAPI = {
         } catch (error) {
             throw error.response?.data || error.message;
         }
+    },
+
+    contact: async(formData) =>{
+         try {
+            const response = await api.post('/api/auth/contact', formData);
+            return response.data;
+        } catch (error) {
+            throw error.response?.data || error.message;
+        }
+    
     },
    
    

@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-let Contact = async(to, subject, htmlContent) =>{
+let ContactMessage = async(to, subject, htmlContent) =>{
     try{
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -25,4 +25,4 @@ let Contact = async(to, subject, htmlContent) =>{
 
 
 }
-export default Contact;
+export default ContactMessage;

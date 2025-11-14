@@ -6,7 +6,7 @@ import ClassForm from "./ClassForm";
 import { classAPI } from "@/app/lib/class";
 import toast from "react-hot-toast";
 
-export default function ClassesManagement({ availableGrades, availableSubjects }) {
+export default function ClassesManagement() {
   const [classes, setClasses] = useState([]);
   const [showClassForm, setShowClassForm] = useState(false);
   const [editingClass, setEditingClass] = useState(null);
@@ -34,7 +34,8 @@ export default function ClassesManagement({ availableGrades, availableSubjects }
   const handleAddClass = async (newClass) => {
     try {
       if (editingClass) {
-       const res =  await classAPI.updateClass(editingClass._id);
+    
+    const res =  await classAPI.updateClass(editingClass, newClass);
        if(res){
         toast.success("updated successfully")
        }
@@ -100,8 +101,7 @@ export default function ClassesManagement({ availableGrades, availableSubjects }
               setShowClassForm(false);
               setEditingClass(null);
             }}
-            availableGrades={availableGrades}
-            availableSubjects={availableSubjects}
+          
           />
         )}
       </AnimatePresence>

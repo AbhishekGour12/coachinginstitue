@@ -18,6 +18,8 @@ import {
 } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
+import { authAPI } from "../lib/auth";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -36,33 +38,41 @@ export default function Page() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Simulate form submission
-    setIsSubmitted(true);
-    setTimeout(() => {
+    try{
+    const res = await authAPI.contact(formData);
+    if(res.success){
+      toast.success(res.message)
+    }
+   // setIsSubmitted(true);
+   {/** setTimeout(() => {
       setIsSubmitted(false);
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     }, 3000);
+    */}
+  }catch(err){
+    toast.error(err.message)
+  }
   };
 
   const contactInfo = [
     {
       icon: FaMapMarkerAlt,
       title: "Visit Our Campus",
-      details: ["B 37/3, Ground Floor, Double Story", "Ramesh Nagar, Near Tejaji Nagar", "Indore, 452020"],
+      details: ["Baba Complex, near Indian Oil petrol pump, Tejaji Nagar, Khandwa Road, Indore M.P. 452020"],
       color: "text-blue-500"
     },
     {
       icon: FaPhone,
       title: "Call Us",
-      details: ["+91 9599272754", "+91 9876543210"],
+      details: ["+91 6265866608", "+91 9981209825"],
       color: "text-green-500"
     },
     {
       icon: FaEnvelope,
       title: "Email Us",
-      details: ["hello@info.com.ng", "admissions@elitecoaching.com"],
+      details: ["mjdclasses@gmail.com"],
       color: "text-red-500"
     },
     {
@@ -74,11 +84,11 @@ export default function Page() {
   ];
 
   const socialLinks = [
-    { icon: FaInstagram, href: "#", color: "hover:text-pink-600", label: "Instagram" },
-    { icon: FaFacebookF, href: "#", color: "hover:text-blue-600", label: "Facebook" },
+    { icon: FaInstagram, href: "https://www.instagram.com/mjd_classes?igsh=enFubWR3eHNtM3Ns", color: "hover:text-pink-600", label: "Instagram" },
+    { icon: FaFacebookF, href: "https://www.facebook.com/share/16PkLxHDHG/", color: "hover:text-blue-600", label: "Facebook" },
     { icon: FaTwitter, href: "#", color: "hover:text-blue-400", label: "Twitter" },
     { icon: FaYoutube, href: "#", color: "hover:text-red-600", label: "YouTube" },
-    { icon: FaWhatsapp, href: "#", color: "hover:text-green-500", label: "WhatsApp" },
+    { icon: FaWhatsapp, href: "https://wa.me/919981209825", color: "hover:text-green-500", label: "WhatsApp" },
     { icon: FaLinkedin, href: "#", color: "hover:text-blue-700", label: "LinkedIn" }
   ];
 
@@ -289,7 +299,7 @@ export default function Page() {
                 className="grid grid-cols-2 gap-4"
               >
                 <motion.a
-                  href="tel:+919599272754"
+                  href="tel:+919981209825"
                   whileHover={{ scale: 1.05 }}
                   className="bg-green-500 hover:bg-green-600 text-white text-center py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
                 >
@@ -297,7 +307,7 @@ export default function Page() {
                   <span>Call Now</span>
                 </motion.a>
                 <motion.a
-                  href="https://wa.me/919599272754"
+                  href="https://wa.me/919981209825"
                   whileHover={{ scale: 1.05 }}
                   className="bg-green-600 hover:bg-green-700 text-white text-center py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2"
                 >
